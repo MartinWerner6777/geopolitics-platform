@@ -1,0 +1,2082 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXUS — Geopolitical Intelligence Platform v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ================================================================
+   NEXUS v2 — DESIGN SYSTEM
+   Intelligence Agency / UN Archive Aesthetic
+   Dark amber on deep charcoal | IBM Plex + Playfair Display
+   ================================================================ */
+
+:root {
+  --bg-primary: #0c0d0e;
+  --bg-secondary: #111315;
+  --bg-card: #181a1d;
+  --bg-card-hover: #1e2124;
+  --bg-input: #0e1012;
+  --bg-overlay: rgba(12,13,14,0.95);
+  --accent: #c8922a;
+  --accent-dim: #9a6e1e;
+  --accent-glow: rgba(200,146,42,0.15);
+  --accent-subtle: rgba(200,146,42,0.07);
+  --text-primary: #e8e3db;
+  --text-secondary: #9a9590;
+  --text-muted: #555250;
+  --border: rgba(200,146,42,0.2);
+  --border-dim: rgba(255,255,255,0.06);
+  --border-hover: rgba(200,146,42,0.4);
+  --red: #c0392b; --blue: #2471a3; --green: #1e8449;
+  --purple: #7d3c98; --orange: #ca6f1e;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --radius: 3px; --radius-lg: 7px;
+  --shadow: 0 4px 32px rgba(0,0,0,0.5);
+  --shadow-sm: 0 2px 12px rgba(0,0,0,0.3);
+  --transition: 0.2s cubic-bezier(0.4,0,0.2,1);
+  --nav-h: 58px;
+}
+
+[data-theme="light"] {
+  --bg-primary: #f2efe9; --bg-secondary: #e8e5de; --bg-card: #fff;
+  --bg-card-hover: #f8f6f2; --bg-input: #fff; --bg-overlay: rgba(242,239,233,0.97);
+  --accent: #8a5c12; --accent-dim: #6b460d; --accent-glow: rgba(138,92,18,0.12);
+  --accent-subtle: rgba(138,92,18,0.06);
+  --text-primary: #1a1814; --text-secondary: #5a5248; --text-muted: #9a8e84;
+  --border: rgba(138,92,18,0.22); --border-dim: rgba(0,0,0,0.07);
+  --border-hover: rgba(138,92,18,0.45); --shadow: 0 4px 32px rgba(0,0,0,0.12);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-primary);min-height:100vh;line-height:1.65;transition:background .3s,color .3s}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.2}
+h1{font-size:clamp(1.9rem,4vw,3.2rem)}
+h2{font-size:clamp(1.3rem,3vw,1.9rem)}
+h3{font-size:1.1rem}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:var(--font-body)}
+select,input{font-family:var(--font-body)}
+
+/* Scanline */
+body::after{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.018) 2px,rgba(0,0,0,.018) 4px);pointer-events:none;z-index:9999}
+
+/* ================================================================
+   SCROLLBAR
+   ================================================================ */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg-primary)}
+::-webkit-scrollbar-thumb{background:rgba(200,146,42,0.25);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+
+/* ================================================================
+   UTILITIES
+   ================================================================ */
+.label{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+.mono{font-family:var(--font-mono)}
+.text-muted{color:var(--text-muted)}
+.text-secondary{color:var(--text-secondary)}
+.text-accent{color:var(--accent)}
+.mb-1{margin-bottom:.5rem}.mb-2{margin-bottom:1rem}.mb-3{margin-bottom:1.5rem}.mb-4{margin-bottom:2rem}
+.mt-2{margin-top:1rem}.mt-3{margin-top:1.5rem}.mt-4{margin-top:2rem}
+.hidden{display:none!important}
+.divider{height:1px;background:var(--border-dim);margin:1.5rem 0}
+.container{max-width:1320px;margin:0 auto;padding:0 2rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+@media(max-width:1024px){.grid-4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}.container{padding:0 1rem}}
+
+/* ================================================================
+   NAVIGATION
+   ================================================================ */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--nav-h);background:rgba(12,13,14,.93);backdrop-filter:blur(14px);border-bottom:1px solid var(--border-dim)}
+[data-theme="light"] nav{background:rgba(242,239,233,.93)}
+.nav-inner{max-width:1320px;margin:0 auto;padding:0 2rem;height:100%;display:flex;align-items:center;gap:2rem}
+.nav-logo{font-family:var(--font-mono);font-size:1rem;font-weight:500;letter-spacing:.08em;display:flex;align-items:center;gap:10px;flex-shrink:0;cursor:pointer}
+.nav-logo-mark{width:30px;height:30px;border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--accent);font-family:var(--font-mono);letter-spacing:0;flex-shrink:0}
+.nav-search{flex:1;max-width:380px;position:relative}
+.nav-search input{width:100%;background:var(--bg-secondary);border:1px solid var(--border-dim);border-radius:var(--radius);padding:.5rem 1rem .5rem 2.4rem;font-size:.85rem;color:var(--text-primary);outline:none;transition:border-color var(--transition)}
+.nav-search input:focus{border-color:var(--accent)}
+.nav-search-icon{position:absolute;left:.75rem;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:.9rem;pointer-events:none}
+.nav-links{display:flex;align-items:center;gap:1.5rem;list-style:none;margin-left:auto}
+.nav-links a{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-secondary);transition:color var(--transition);cursor:pointer;padding:.25rem 0;border-bottom:1.5px solid transparent}
+.nav-links a:hover,.nav-links a.active{color:var(--accent);border-bottom-color:var(--accent)}
+.nav-actions{display:flex;align-items:center;gap:.75rem;flex-shrink:0}
+.lang-select{background:none;border:1px solid var(--border-dim);color:var(--text-secondary);font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;padding:5px 10px;border-radius:var(--radius);cursor:pointer;outline:none;transition:border-color var(--transition)}
+.lang-select:hover{border-color:var(--accent);color:var(--accent)}
+.theme-btn{background:none;border:1px solid var(--border-dim);color:var(--text-secondary);font-size:.9rem;width:32px;height:32px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;transition:all var(--transition)}
+.theme-btn:hover{border-color:var(--accent);color:var(--accent)}
+@media(max-width:768px){.nav-links{display:none}.nav-search{display:none}}
+
+/* Global search suggestions */
+.global-suggestions{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;z-index:300;display:none;box-shadow:var(--shadow)}
+.global-suggestions.open{display:block}
+.sugg-item{padding:.65rem 1rem;display:flex;align-items:center;gap:10px;cursor:pointer;transition:background var(--transition);border-bottom:1px solid var(--border-dim)}
+.sugg-item:last-child{border-bottom:none}
+.sugg-item:hover{background:var(--accent-subtle)}
+.sugg-tag{font-family:var(--font-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:2px 7px;border-radius:2px;flex-shrink:0}
+.tag-war{background:rgba(192,57,43,.15);color:#e74c3c}
+.tag-event{background:rgba(36,113,163,.15);color:#5dade2}
+.tag-country{background:rgba(30,132,73,.15);color:#2ecc71}
+.tag-org{background:rgba(125,60,152,.15);color:#af7ac5}
+.sugg-name{font-size:13px}.sugg-meta{font-size:11px;color:var(--text-muted);margin-left:auto}
+
+/* ================================================================
+   PAGES
+   ================================================================ */
+.page{display:none;padding-top:var(--nav-h)}
+.page.active{display:block}
+
+/* ================================================================
+   HERO
+   ================================================================ */
+.hero{min-height:calc(100vh - var(--nav-h));display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4rem 2rem;position:relative;overflow:hidden}
+.hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(200,146,42,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(200,146,42,.03) 1px,transparent 1px);background-size:70px 70px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%)}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);padding:5px 16px;border-radius:100px;margin-bottom:2rem;font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:blink 2.5s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hero h1{max-width:860px;margin:0 auto 1.25rem;background:linear-gradient(135deg,var(--text-primary) 55%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{max-width:580px;margin:0 auto 2.5rem;color:var(--text-secondary);font-size:1rem;line-height:1.75}
+
+/* Hero Search */
+.hero-search-wrap{width:100%;max-width:720px;margin:0 auto;position:relative}
+.hero-search-bar{display:flex;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:border-color var(--transition),box-shadow var(--transition)}
+.hero-search-bar:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+.hero-search-icon{padding:0 1rem;color:var(--accent);font-size:1.1rem;display:flex;align-items:center}
+.hero-search-bar input{flex:1;background:none;border:none;outline:none;font-family:var(--font-body);font-size:1rem;color:var(--text-primary);padding:1rem 0}
+.hero-search-bar input::placeholder{color:var(--text-muted)}
+.hero-search-bar button{background:var(--accent);border:none;color:#0c0d0e;font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;padding:1rem 1.5rem;transition:background var(--transition);white-space:nowrap}
+.hero-search-bar button:hover{background:var(--accent-dim)}
+.hero-chips{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-top:1.25rem}
+.chip{border:1px solid var(--border-dim);background:none;color:var(--text-secondary);font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border-radius:100px;cursor:pointer;transition:all var(--transition)}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Hero Stats */
+.hero-stats{display:flex;gap:3rem;margin-top:4rem;justify-content:center;flex-wrap:wrap}
+.stat-num{font-family:var(--font-display);font-size:2rem;font-weight:700;color:var(--accent);display:block}
+.stat-lbl{font-family:var(--font-mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted);margin-top:4px}
+
+/* ================================================================
+   CONFLICT OF THE WEEK
+   ================================================================ */
+.cotw-section{padding:4rem 0;background:var(--bg-secondary)}
+.cotw-inner{display:grid;grid-template-columns:1fr 1.6fr;gap:3rem;align-items:center}
+@media(max-width:900px){.cotw-inner{grid-template-columns:1fr}}
+.cotw-badge{display:inline-flex;align-items:center;gap:8px;background:var(--accent-glow);border:1px solid var(--border);padding:5px 14px;border-radius:100px;margin-bottom:1.25rem}
+.cotw-badge span{font-family:var(--font-mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+.cotw-pulse{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:blink 1.5s infinite}
+.cotw-meta{display:flex;gap:1.5rem;margin-top:1.5rem;flex-wrap:wrap}
+.cotw-meta-item .label{display:block;margin-bottom:3px}
+.cotw-meta-item span{font-size:13px;color:var(--text-primary)}
+.cotw-timeline{display:flex;flex-direction:column;gap:1rem}
+.cotw-event{display:flex;gap:1rem;align-items:flex-start;padding:.75rem;background:var(--bg-card);border:1px solid var(--border-dim);border-radius:var(--radius);transition:border-color var(--transition)}
+.cotw-event:hover{border-color:var(--border)}
+.cotw-year{font-family:var(--font-mono);font-size:10px;color:var(--accent);flex-shrink:0;margin-top:2px;min-width:45px}
+.cotw-desc{font-size:13px;color:var(--text-secondary);line-height:1.55}
+.cotw-btn{margin-top:1.5rem;display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#0c0d0e;font-family:var(--font-mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;padding:.75rem 1.5rem;border:none;border-radius:var(--radius);transition:background var(--transition)}
+.cotw-btn:hover{background:var(--accent-dim)}
+
+/* ================================================================
+   CARDS
+   ================================================================ */
+.card{background:var(--bg-card);border:1px solid var(--border-dim);border-radius:var(--radius-lg);padding:1.5rem;transition:all var(--transition);position:relative;overflow:hidden}
+.card.clickable{cursor:pointer}
+.card.clickable:hover{border-color:var(--border);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.card-icon{width:38px;height:38px;border:1px solid var(--border-dim);display:flex;align-items:center;justify-content:center;font-size:1.1rem;border-radius:var(--radius);flex-shrink:0}
+.card-period{font-family:var(--font-mono);font-size:10px;color:var(--text-muted)}
+.card-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:1rem}
+.badge{font-family:var(--font-mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;padding:3px 7px;border-radius:2px}
+.badge-war{background:rgba(192,57,43,.12);color:#e74c3c;border:1px solid rgba(192,57,43,.2)}
+.badge-cold{background:rgba(36,113,163,.12);color:#5dade2;border:1px solid rgba(36,113,163,.2)}
+.badge-civil{background:rgba(202,111,30,.12);color:#e67e22;border:1px solid rgba(202,111,30,.2)}
+.badge-rev{background:rgba(125,60,152,.12);color:#af7ac5;border:1px solid rgba(125,60,152,.2)}
+.badge-proxy{background:rgba(30,132,73,.12);color:#2ecc71;border:1px solid rgba(30,132,73,.2)}
+.badge-ongoing{background:rgba(200,146,42,.12);color:var(--accent);border:1px solid rgba(200,146,42,.2)}
+
+/* Section Headers */
+.section-hdr{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:1.75rem;padding-bottom:1rem;border-bottom:1px solid var(--border-dim)}
+.view-all{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);cursor:pointer;border-bottom:1px solid transparent;transition:border-color var(--transition)}
+.view-all:hover{border-bottom-color:var(--accent)}
+
+/* ================================================================
+   FILTER BAR
+   ================================================================ */
+.filter-bar{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;margin-bottom:1.75rem;padding:.9rem 1.25rem;background:var(--bg-secondary);border:1px solid var(--border-dim);border-radius:var(--radius)}
+.filter-sel{background:var(--bg-card);border:1px solid var(--border-dim);color:var(--text-primary);font-family:var(--font-mono);font-size:10px;padding:5px 10px;border-radius:var(--radius);cursor:pointer;outline:none;transition:border-color var(--transition)}
+.filter-sel:focus{border-color:var(--accent)}
+
+/* ================================================================
+   DETAIL VIEW (CONFLICT / COUNTRY)
+   ================================================================ */
+.detail-hero{padding:2.5rem;background:var(--bg-card);border:1px solid var(--border-dim);border-radius:var(--radius-lg);margin-bottom:1.5rem;position:relative;overflow:hidden}
+.detail-hero::after{content:'';position:absolute;right:-60px;top:-60px;width:280px;height:280px;background:radial-gradient(circle,var(--accent-glow) 0%,transparent 70%);pointer-events:none}
+.detail-meta{display:flex;gap:2rem;margin-top:1.5rem;flex-wrap:wrap}
+.detail-meta-item .label{display:block;margin-bottom:3px}
+.detail-meta-item span{font-size:13px}
+.back-btn{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-secondary);cursor:pointer;margin-bottom:1.5rem;transition:color var(--transition);border:none;background:none;padding:0}
+.back-btn:hover{color:var(--accent)}
+
+/* Tabs */
+.detail-tabs{display:flex;border-bottom:1px solid var(--border-dim);margin-bottom:1.75rem;overflow-x:auto;gap:0}
+.tab-btn{background:none;border:none;border-bottom:2px solid transparent;color:var(--text-secondary);font-family:var(--font-mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;padding:.85rem 1.35rem;cursor:pointer;transition:all var(--transition);white-space:nowrap;flex-shrink:0}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-btn:hover{color:var(--accent)}
+.tab-panel{display:none;animation:fadeUp .3s ease}
+.tab-panel.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* Timeline */
+.timeline{position:relative;padding-left:2.5rem}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--accent),transparent)}
+.tl-item{position:relative;margin-bottom:2rem;animation:slideIn .4s ease both}
+@keyframes slideIn{from{opacity:0;transform:translateX(-15px)}to{opacity:1;transform:translateX(0)}}
+.tl-dot{position:absolute;left:-2.5rem;top:4px;width:16px;height:16px;border:2px solid var(--accent);border-radius:50%;background:var(--bg-primary);display:flex;align-items:center;justify-content:center}
+.tl-dot::after{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent)}
+.tl-year{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;color:var(--accent);margin-bottom:3px}
+.tl-title{font-size:.95rem;font-weight:600;margin-bottom:5px}
+.tl-desc{font-size:13px;color:var(--text-secondary);line-height:1.6}
+
+/* Actors */
+.actors-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1rem}
+.actor-card{background:var(--bg-card);border:1px solid var(--border-dim);border-radius:var(--radius);padding:1.25rem;transition:border-color var(--transition)}
+.actor-card:hover{border-color:var(--border)}
+.actor-flag{font-size:1.9rem;margin-bottom:.65rem;display:block}
+.actor-name{font-size:.9rem;font-weight:600;margin-bottom:3px}
+.actor-role{font-size:11px;color:var(--text-muted);font-family:var(--font-mono)}
+.actor-side{display:inline-block;margin-top:7px;font-family:var(--font-mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:2px}
+.side-west{background:rgba(36,113,163,.12);color:#5dade2}
+.side-east{background:rgba(192,57,43,.12);color:#e74c3c}
+.side-neutral{background:rgba(100,100,100,.12);color:#888}
+
+/* Causes list */
+.cause-list{list-style:none;display:flex;flex-direction:column;gap:.65rem}
+.cause-list li{display:flex;gap:.85rem;align-items:flex-start;padding:.85rem;background:var(--bg-card);border:1px solid var(--border-dim);border-radius:var(--radius);font-size:13px;color:var(--text-secondary);line-height:1.6}
+.cause-num{font-family:var(--font-mono);font-size:10px;color:var(--accent);flex-shrink:0;margin-top:2px;min-width:22px}
+
+/* Insight cards */
+.insight-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem;margin-top:1.25rem}
+.insight-card{background:var(--bg-card);border:1px solid var(--border-dim);border-radius:var(--radius);padding:1.35rem;border-left:3px solid}
+.insight-card.p1{border-left-color:#5dade2}
+.insight-card.p2{border-left-color:#e74c3c}
+.insight-card.p3{border-left-color:#2ecc71}
+.insight-card.p4{border-left-color:var(--accent)}
+.insight-card h4{margin-bottom:.65rem;font-size:.95rem}
+.insight-card p{font-size:13px;color:var(--text-secondary);line-height:1.65}
+.info-box{background:var(--accent-subtle);border:1px solid var(--border);border-radius:var(--radius);padding:.9rem 1.1rem;font-size:13px;color:var(--text-secondary);line-height:1.65}
+.info-box strong{color:var(--accent);font-weight:500}
+
+/* ================================================================
+   WORLD MAP
+   ================================================================ */
+.map-page{padding:1.5rem 0 2rem}
+.map-controls{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;padding:.9rem 1.25rem;background:var(--bg-secondary);border:1px solid var(--border-dim);border-radius:var(--radius)}
+.map-container{background:var(--bg-card);border:1px solid var(--border-dim);border-radius:var(--radius-lg);overflow:hidden;position:relative}
+.map-svg-wrap{width:100%;overflow:auto}
+.map-svg-wrap svg{width:100%;min-width:700px;height:auto;display:block}
+.map-tooltip{position:absolute;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:.6rem .9rem;pointer-events:none;z-index:50;display:none;font-size:12px;box-shadow:var(--shadow-sm)}
+.map-tooltip.visible{display:block}
+.map-legend{display:flex;gap:1.25rem;padding:1rem 1.25rem;border-top:1px solid var(--border-dim);flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;color:var(--text-muted)}
+.legend-dot{width:10px;height:10px;border-radius:2px}
+/* Time slider */
+.time-slider-wrap{display:flex;align-items:center;gap:1rem;flex:1;min-width:200px}
+.time-slider-wrap label{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);white-space:nowrap}
+.time-slider{-webkit-appearance:none;appearance:none;flex:1;height:4px;background:var(--border-dim);border-radius:2px;outline:none;cursor:pointer}
+.time-slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--bg-card)}
+.time-year-display{font-family:var(--font-mono);font-size:1rem;font-weight:500;color:var(--accent);min-width:45px;text-align:center}
+/* Country on SVG */
+.country-path{fill:var(--bg-secondary);stroke:rgba(200,146,42,.15);stroke-width:.5;transition:fill .3s,stroke .3s;cursor:pointer}
+.country-path:hover{fill:rgba(200,146,42,.25);stroke:var(--accent)}
+.country-path.conflict-zone{fill:rgba(192,57,43,.35);stroke:#e74c3c}
+.country-path.nato{fill:rgba(36,113,163,.3);stroke:#5dade2}
+.country-path.highlighted{fill:rgba(200,146,42,.45);stroke:var(--accent);stroke-width:1.5}
+
+/* ================================================================
+   POWER RANKINGS
+   ================================================================ */
+.power-page{padding:1.5rem 0 3rem}
+.ranking-table{width:100%;border-collapse:collapse}
+.ranking-table th{background:var(--bg-secondary);font-family:var(--font-mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted);padding:.75rem 1rem;text-align:left;border-bottom:1px solid var(--border-dim)}
+.ranking-table td{padding:.85rem 1rem;border-bottom:1px solid var(--border-dim);font-size:13px;vertical-align:middle}
+.ranking-table tr:hover td{background:var(--accent-subtle)}
+.rank-num{font-family:var(--font-mono);font-weight:500;color:var(--accent);min-width:30px;display:inline-block}
+.rank-flag{font-size:1.2rem;margin-right:8px}
+.rank-bar-wrap{width:120px;height:7px;background:var(--border-dim);border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle}
+.rank-bar{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent-dim),var(--accent))}
+.rank-score{font-family:var(--font-mono);font-size:11px;color:var(--accent);margin-left:.5rem}
+.rank-cat{display:flex;gap:6px;align-items:center}
+
+/* Score breakdown cards */
+.score-breakdown{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-top:1.5rem}
+@media(max-width:768px){.score-breakdown{grid-template-columns:repeat(2,1fr)}}
+.score-card{background:var(--bg-card);border:1px solid var(--border-dim);border-radius:var(--radius);padding:1rem;text-align:center}
+.score-circle{width:70px;height:70px;border-radius:50%;border:3px solid var(--border-dim);display:flex;align-items:center;justify-content:center;margin:0 auto .75rem;font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:var(--accent);position:relative}
+.score-circle::after{content:attr(data-score);position:absolute}
+.score-name{font-family:var(--font-mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted)}
+
+/* ================================================================
+   COUNTRY PROFILES
+   ================================================================ */
+.country-page{padding:1.5rem 0 3rem}
+.country-hero{padding:2.5rem;background:var(--bg-card);border:1px solid var(--border-dim);border-radius:var(--radius-lg);margin-bottom:1.5rem;position:relative;overflow:hidden}
+.country-flag-big{font-size:4rem;margin-bottom:1rem;display:block}
+.country-stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-top:1.5rem}
+.country-stat{background:var(--bg-secondary);border-radius:var(--radius);padding:1rem}
+.country-stat .label{display:block;margin-bottom:4px}
+.country-stat span{font-size:14px;font-weight:500}
+.alliances-wrap{display:flex;gap:.65rem;flex-wrap:wrap;margin-top:.75rem}
+.alliance-tag{border:1px solid var(--border-dim);background:var(--accent-subtle);font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:2px;color:var(--accent)}
+.country-analysis-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.25rem}
+.country-metric-card{background:var(--bg-card);border:1px solid var(--border-dim);border-radius:var(--radius);padding:1.2rem}
+.metric-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:.75rem}
+.metric-row:last-child{margin-bottom:0}
+.metric-value{font-family:var(--font-display);font-size:2rem;color:var(--accent);line-height:1}
+.metric-note{font-size:12px;color:var(--text-muted);line-height:1.6}
+.mini-chart{display:grid;gap:.75rem;margin-top:1rem}
+.mini-chart-row{display:grid;grid-template-columns:80px 1fr 34px;gap:.75rem;align-items:center}
+.mini-chart-row span{font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-secondary)}
+.mini-chart-track{height:10px;background:var(--bg-secondary);border-radius:999px;overflow:hidden}
+.mini-chart-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent-dim),var(--accent))}
+.mode-buttons{display:flex;gap:.55rem;flex-wrap:wrap;margin:1rem 0 .85rem}
+.mode-btn{background:transparent;border:1px solid var(--border-dim);border-radius:999px;padding:.45rem .8rem;color:var(--text-secondary);font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;transition:all var(--transition)}
+.mode-btn:hover,.mode-btn.active{border-color:var(--accent);color:var(--accent);background:var(--accent-subtle)}
+.explain-box{background:var(--bg-secondary);border:1px solid var(--border-dim);border-radius:var(--radius);padding:1rem;font-size:13px;color:var(--text-secondary);line-height:1.7;min-height:120px}
+@media(max-width:900px){.country-analysis-grid{grid-template-columns:1fr}}
+
+/* ================================================================
+   COMPARE
+   ================================================================ */
+.compare-wrap{display:grid;grid-template-columns:1fr auto 1fr;gap:1.5rem;align-items:start}
+.compare-vs{font-family:var(--font-display);font-size:1.4rem;color:var(--text-muted);align-self:center;text-align:center;padding:.75rem}
+.compare-sel-wrap{margin-bottom:1.25rem}
+.compare-sel-wrap select{width:100%;background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary);font-family:var(--font-body);font-size:.9rem;padding:.75rem 1rem;border-radius:var(--radius);outline:none;cursor:pointer}
+.compare-row{padding:.7rem 0;border-bottom:1px solid var(--border-dim);display:flex;flex-direction:column;gap:3px}
+.compare-row:last-child{border-bottom:none}
+.compare-row-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted)}
+.compare-row-val{font-size:13px;color:var(--text-secondary)}
+@media(max-width:700px){.compare-wrap{grid-template-columns:1fr}.compare-vs{display:none}}
+
+/* ================================================================
+   FOOTER
+   ================================================================ */
+footer{background:var(--bg-secondary);border-top:1px solid var(--border-dim);padding:2.5rem 2rem;text-align:center}
+.footer-logo{font-family:var(--font-mono);font-size:1rem;color:var(--accent);margin-bottom:.35rem}
+.footer-sub{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;color:var(--text-muted)}
+
+/* Mobile nav hamburger */
+.hamburger{display:none;background:none;border:1px solid var(--border-dim);color:var(--text-secondary);width:32px;height:32px;border-radius:var(--radius);font-size:1rem;align-items:center;justify-content:center;flex-shrink:0}
+@media(max-width:768px){.hamburger{display:flex}}
+
+/* Mobile menu overlay */
+.mobile-menu{display:none;position:fixed;inset:0;z-index:500;background:var(--bg-overlay);backdrop-filter:blur(18px);flex-direction:column;align-items:center;justify-content:center;gap:2rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-family:var(--font-mono);font-size:1.1rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-primary);cursor:pointer;padding:.5rem 1.5rem;border-bottom:1.5px solid transparent;transition:all .2s}
+.mobile-menu a:hover,.mobile-menu a.active{color:var(--accent);border-bottom-color:var(--accent)}
+.mobile-menu-close{position:absolute;top:1.25rem;right:1.25rem;background:none;border:1px solid var(--border-dim);color:var(--text-secondary);width:38px;height:38px;border-radius:var(--radius);font-size:1.2rem;cursor:pointer}
+.mobile-menu-actions{display:flex;gap:1rem;align-items:center;margin-top:1rem}
+.mobile-menu-lang{background:none;border:1px solid var(--border-dim);color:var(--text-secondary);font-family:var(--font-mono);font-size:12px;padding:6px 12px;border-radius:var(--radius);cursor:pointer;outline:none}
+
+/* ================================================================
+   ANIMATIONS
+   ================================================================ */
+@keyframes countUp{from{opacity:0}to{opacity:1}}
+.fade-in{animation:fadeUp .5s ease both}
+
+/* Section padding */
+.section-pad{padding:4rem 0}
+.section-pad.alt{background:var(--bg-secondary)}
+
+/* ================================================================
+   MOBILE RESPONSIVE FIXES
+   ================================================================ */
+@media(max-width:768px){
+  /* Nav */
+  .nav-inner{padding:0 1rem;gap:1rem}
+  .nav-actions{gap:.5rem}
+
+  /* Hero */
+  .hero{padding:2.5rem 1rem 2rem;min-height:auto}
+  .hero h1{font-size:clamp(1.5rem,7vw,2.4rem)}
+  .hero-sub{font-size:.9rem;margin-bottom:1.75rem}
+  .hero-badge{font-size:9px;padding:4px 12px}
+  .hero-stats{gap:1.5rem;margin-top:2.5rem}
+  .stat-num{font-size:1.5rem}
+
+  /* Hero search */
+  .hero-search-wrap{padding:0 .25rem}
+  .hero-search-bar input{font-size:.9rem;min-width:0}
+  .hero-search-bar button{padding:.75rem 1rem;font-size:9px}
+  .hero-chips{gap:.35rem}
+  .chip{font-size:9px;padding:4px 10px}
+
+  /* COTW */
+  .cotw-section{padding:2.5rem 0}
+
+  /* Cards */
+  .card{padding:1.1rem}
+
+  /* Map */
+  .map-controls{flex-direction:column;align-items:stretch;gap:.65rem}
+  .time-slider-wrap{min-width:unset}
+  .map-svg-wrap{-webkit-overflow-scrolling:touch}
+  #map-hint{display:none}
+
+  /* Power table — card layout on mobile */
+  .ranking-table thead{display:none}
+  .ranking-table tr{display:flex;flex-wrap:wrap;padding:.75rem;border:1px solid var(--border-dim);border-radius:var(--radius);margin-bottom:.6rem;background:var(--bg-card);gap:.35rem}
+  .ranking-table td{border:none;padding:.15rem .35rem;font-size:12px}
+  .ranking-table td:nth-child(3),
+  .ranking-table td:nth-child(4),
+  .ranking-table td:nth-child(5),
+  .ranking-table td:nth-child(6){display:none}
+  .ranking-table td:nth-child(7){margin-left:auto}
+  .rank-bar-wrap{width:80px}
+
+  /* Compare */
+  .compare-wrap{grid-template-columns:1fr}
+  .compare-vs{display:none}
+
+  /* Detail / Country */
+  .detail-hero{padding:1.5rem}
+  .detail-meta{gap:1rem}
+  .country-hero{padding:1.5rem}
+  .country-stats-grid{grid-template-columns:1fr 1fr}
+
+  /* Filter bar */
+  .filter-bar{flex-direction:column;align-items:stretch}
+  .filter-sel{width:100%}
+
+  /* Section headers */
+  .section-hdr{flex-direction:column;align-items:flex-start;gap:.5rem}
+
+  /* Actors grid */
+  .actors-grid{grid-template-columns:1fr 1fr}
+
+  /* Insight grid */
+  .insight-grid{grid-template-columns:1fr}
+
+  /* Timeline */
+  .timeline{padding-left:2rem}
+
+  /* Footer */
+  footer{padding:1.5rem 1rem}
+  .footer-sub{font-size:9px}
+}
+
+@media(max-width:480px){
+  .hero-stats{gap:1rem}
+  .stat-num{font-size:1.3rem}
+  .stat-lbl{font-size:9px}
+  .actors-grid{grid-template-columns:1fr}
+  .country-stats-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ================================================================
+     NAV
+     ================================================================ -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="goPage('home')">
+      <div class="nav-logo-mark">NX</div>
+      NEXUS
+    </div>
+    <div class="nav-search">
+      <span class="nav-search-icon">⌕</span>
+      <input type="text" id="nav-search-input" placeholder="Search conflicts, countries…"
+        oninput="handleNavSearch(this.value)" onkeydown="navSearchKey(event)" autocomplete="off">
+      <div class="global-suggestions" id="nav-suggestions"></div>
+    </div>
+    <ul class="nav-links">
+      <li><a id="nl-home" onclick="goPage('home')" class="active" data-i18n="nav.home">Intelligence</a></li>
+      <li><a id="nl-map" onclick="goPage('map')" data-i18n="nav.map">World Map</a></li>
+      <li><a id="nl-explore" onclick="goPage('explore')" data-i18n="nav.explore">Explore</a></li>
+      <li><a id="nl-countries" onclick="goPage('countries')" data-i18n="nav.countries">Countries</a></li>
+      <li><a id="nl-power" onclick="goPage('power')" data-i18n="nav.power">Power Index</a></li>
+      <li><a id="nl-compare" onclick="goPage('compare')" data-i18n="nav.compare">Compare</a></li>
+    </ul>
+    <div class="nav-actions">
+      <select class="lang-select" onchange="setLang(this.value)" id="lang-sel">
+        <option value="en">EN</option>
+        <option value="de">DE</option>
+        <option value="fr">FR</option>
+        <option value="es">ES</option>
+      </select>
+      <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">◐</button>
+      <button class="hamburger" onclick="openMobileMenu()" aria-label="Menu">☰</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile menu overlay -->
+<div class="mobile-menu" id="mobile-menu">
+  <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
+  <a onclick="goPage('home');closeMobileMenu()" data-i18n="nav.home">Intelligence</a>
+  <a onclick="goPage('map');closeMobileMenu()" data-i18n="nav.map">World Map</a>
+  <a onclick="goPage('explore');closeMobileMenu()" data-i18n="nav.explore">Explore</a>
+  <a onclick="goPage('countries');closeMobileMenu()" data-i18n="nav.countries">Countries</a>
+  <a onclick="goPage('power');closeMobileMenu()" data-i18n="nav.power">Power Index</a>
+  <a onclick="goPage('compare');closeMobileMenu()" data-i18n="nav.compare">Compare</a>
+  <div class="mobile-menu-actions">
+    <select class="mobile-menu-lang" onchange="setLang(this.value);document.getElementById('lang-sel').value=this.value" id="mobile-lang-sel">
+      <option value="en">EN</option>
+      <option value="de">DE</option>
+      <option value="fr">FR</option>
+      <option value="es">ES</option>
+    </select>
+    <button class="theme-btn" onclick="toggleTheme()">◐</button>
+  </div>
+</div>
+
+<!-- ================================================================
+     PAGE: HOME
+     ================================================================ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-badge"><div class="status-dot"></div><span data-i18n="hero.badge">Geopolitical Intelligence Platform</span></div>
+    <h1 data-i18n="hero.headline">Understanding Conflicts. Navigating History.</h1>
+    <p class="hero-sub" data-i18n="hero.sub">A structured intelligence resource for diplomats, scholars, and analysts. Explore the causes, actors, and consequences of pivotal world events.</p>
+    <div class="hero-search-wrap">
+      <div class="hero-search-bar">
+        <span class="hero-search-icon">⌕</span>
+        <input type="text" id="hero-search-input" data-i18n-placeholder="search.placeholder" placeholder="Search wars, countries, political events…"
+          oninput="handleHeroSearch(this.value)" onkeydown="heroSearchKey(event)" autocomplete="off">
+        <button onclick="executeHeroSearch()" data-i18n="search.btn">Search →</button>
+      </div>
+      <div class="global-suggestions" id="hero-suggestions"></div>
+      <div class="hero-chips" id="hero-chips">
+        <button class="chip" onclick="quickOpen('cold-war')">Cold War</button>
+        <button class="chip" onclick="quickOpen('ww2')">WWII</button>
+        <button class="chip" onclick="quickOpen('ukraine')">Ukraine War</button>
+        <button class="chip" onclick="quickOpen('arab-spring')">Arab Spring</button>
+        <button class="chip" onclick="quickOpen('korean')">Korean War</button>
+        <button class="chip" onclick="openCountry('usa')">USA</button>
+        <button class="chip" onclick="openCountry('china')">China</button>
+        <button class="chip" onclick="openCountry('russia')">Russia</button>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div><span class="stat-num">12</span><div class="stat-lbl" data-i18n="hero.stat1">Conflicts Indexed</div></div>
+      <div><span class="stat-num">200+</span><div class="stat-lbl" data-i18n="hero.stat2">Historical Events</div></div>
+      <div><span class="stat-num">50+</span><div class="stat-lbl" data-i18n="hero.stat3">Nations Covered</div></div>
+      <div><span class="stat-num">4</span><div class="stat-lbl" data-i18n="hero.stat4">Ongoing Conflicts</div></div>
+    </div>
+  </div>
+
+  <!-- Conflict of the Week -->
+  <div class="cotw-section">
+    <div class="container">
+      <div class="cotw-inner">
+        <div>
+          <div class="cotw-badge"><div class="cotw-pulse"></div><span data-i18n="cotw.badge">Conflict of the Week</span></div>
+          <div class="label mb-2" id="cotw-period"></div>
+          <h2 id="cotw-title" class="mb-3"></h2>
+          <p id="cotw-summary" style="color:var(--text-secondary);font-size:.95rem;line-height:1.75;margin-bottom:1.25rem"></p>
+          <div class="cotw-meta" id="cotw-meta"></div>
+          <button class="cotw-btn" id="cotw-btn" data-i18n="cotw.btn">Full Analysis →</button>
+        </div>
+        <div>
+          <div class="label mb-2" data-i18n="cotw.tlabel">Key Events</div>
+          <div class="cotw-timeline" id="cotw-timeline"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Featured Conflicts -->
+  <section class="section-pad">
+    <div class="container">
+      <div class="section-hdr">
+        <div><div class="label mb-1" data-i18n="home.featuredLabel">Featured Analysis</div><h2 data-i18n="home.featuredH">Major Conflicts</h2></div>
+        <span class="view-all" onclick="goPage('explore')" data-i18n="home.viewAll">View All →</span>
+      </div>
+      <div class="grid-3" id="featured-grid"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ================================================================
+     PAGE: MAP
+     ================================================================ -->
+<div class="page" id="page-map">
+  <div class="map-page container">
+    <div class="section-hdr mt-3">
+      <div><div class="label mb-1" data-i18n="map.label">Interactive</div><h2 data-i18n="map.heading">World Map</h2></div>
+    </div>
+    <div class="map-controls">
+      <div class="time-slider-wrap">
+        <label data-i18n="map.year">Year:</label>
+        <input type="range" class="time-slider" id="time-slider" min="1900" max="2025" value="2025" step="5" oninput="updateMapYear(this.value)">
+        <div class="time-year-display" id="year-display">2025</div>
+      </div>
+      <select class="filter-sel" id="map-layer" onchange="updateMapLayer()">
+        <option value="default">Current States</option>
+        <option value="conflicts">Active Conflicts</option>
+        <option value="nato">NATO Alliances</option>
+      </select>
+      <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)" id="map-hint" data-i18n="map.hint">Click a country to open its profile</span>
+    </div>
+    <div class="map-container">
+      <div class="map-svg-wrap">
+        <!-- Simplified but recognizable world map SVG -->
+        <svg id="world-svg" viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg">
+          <!-- Generated simplified world regions -->
+          <!-- North America -->
+          <path id="can" data-name="Canada" class="country-path" d="M70,40 L220,35 L260,70 L240,110 L200,120 L170,100 L120,110 L90,130 L70,110 L60,80 Z"/>
+          <path id="usa" data-name="United States" class="country-path" d="M80,130 L240,115 L270,140 L260,175 L240,190 L200,195 L160,185 L120,190 L90,180 L75,160 Z"/>
+          <path id="mex" data-name="Mexico" class="country-path" d="M95,195 L200,195 L220,210 L215,240 L190,250 L160,245 L130,230 L100,220 Z"/>
+          <path id="cub" data-name="Cuba" class="country-path" d="M175,215 L210,212 L215,220 L200,225 L175,222 Z"/>
+          <!-- Central/South America -->
+          <path id="col" data-name="Colombia" class="country-path" d="M145,260 L185,255 L200,275 L195,295 L170,300 L145,290 L135,275 Z"/>
+          <path id="ven" data-name="Venezuela" class="country-path" d="M185,255 L225,250 L235,265 L225,285 L200,290 L185,275 Z"/>
+          <path id="bra" data-name="Brazil" class="country-path" d="M165,300 L260,280 L285,310 L275,380 L240,420 L200,435 L170,420 L150,380 L145,330 Z"/>
+          <path id="arg" data-name="Argentina" class="country-path" d="M170,425 L215,415 L225,450 L210,490 L190,495 L175,480 L160,455 Z"/>
+          <path id="per" data-name="Peru" class="country-path" d="M140,295 L165,290 L170,330 L155,360 L130,355 L120,320 Z"/>
+          <path id="chi" data-name="Chile" class="country-path" d="M155,360 L180,355 L190,400 L185,460 L175,478 L160,460 L155,410 Z"/>
+          <!-- Europe -->
+          <path id="gbr" data-name="United Kingdom" class="country-path" d="M415,90 L430,85 L440,100 L435,120 L420,125 L410,110 L412,95 Z"/>
+          <path id="fra" data-name="France" class="country-path" d="M430,120 L475,115 L490,130 L485,155 L465,165 L440,162 L425,145 L428,128 Z"/>
+          <path id="deu" data-name="Germany" class="country-path" d="M465,100 L510,98 L520,115 L515,140 L490,145 L470,140 L460,125 L462,108 Z"/>
+          <path id="esp" data-name="Spain" class="country-path" d="M420,160 L475,158 L490,170 L485,195 L455,205 L425,200 L415,185 L418,168 Z"/>
+          <path id="ita" data-name="Italy" class="country-path" d="M470,148 L500,145 L510,160 L505,185 L490,195 L475,188 L468,170 Z"/>
+          <path id="pol" data-name="Poland" class="country-path" d="M500,98 L545,95 L555,112 L550,130 L525,135 L505,130 L498,115 Z"/>
+          <path id="ukr" data-name="Ukraine" class="country-path" d="M530,120 L590,115 L605,130 L600,155 L570,162 L540,158 L525,142 Z"/>
+          <path id="swe" data-name="Sweden" class="country-path" d="M475,55 L495,50 L505,70 L500,95 L480,98 L470,80 L472,62 Z"/>
+          <path id="nor" data-name="Norway" class="country-path" d="M440,40 L480,35 L490,50 L480,68 L460,72 L440,58 Z"/>
+          <path id="fin" data-name="Finland" class="country-path" d="M495,40 L535,38 L545,55 L540,80 L515,85 L498,72 L492,55 Z"/>
+          <path id="bel" data-name="Belarus" class="country-path" d="M535,98 L570,95 L578,110 L572,125 L548,128 L533,118 Z"/>
+          <path id="rou" data-name="Romania" class="country-path" d="M543,140 L585,135 L598,150 L590,168 L562,172 L542,162 L538,148 Z"/>
+          <path id="ser" data-name="Serbia" class="country-path" d="M515,155 L540,152 L548,165 L540,178 L520,180 L510,168 Z"/>
+          <path id="grc" data-name="Greece" class="country-path" d="M520,175 L548,172 L555,188 L545,202 L525,205 L515,192 Z"/>
+          <path id="hun" data-name="Hungary" class="country-path" d="M520,138 L548,135 L555,148 L548,158 L522,160 L515,148 Z"/>
+          <path id="aut" data-name="Austria" class="country-path" d="M495,132 L520,130 L527,142 L520,152 L498,152 L490,142 Z"/>
+          <path id="che" data-name="Switzerland" class="country-path" d="M462,145 L490,143 L496,153 L488,162 L465,162 L458,153 Z"/>
+          <path id="nld" data-name="Netherlands" class="country-path" d="M450,100 L468,98 L472,110 L465,118 L450,116 L445,108 Z"/>
+          <path id="cze" data-name="Czech Republic" class="country-path" d="M497,115 L522,112 L528,125 L520,133 L500,133 L492,123 Z"/>
+          <!-- Russia -->
+          <path id="rus" data-name="Russia" class="country-path" d="M545,35 L820,20 L870,55 L880,100 L840,130 L780,150 L720,145 L670,130 L620,125 L590,115 L570,95 L545,80 Z"/>
+          <!-- Middle East -->
+          <path id="tur" data-name="Turkey" class="country-path" d="M555,180 L630,175 L645,188 L640,205 L605,210 L565,208 L550,195 Z"/>
+          <path id="syr" data-name="Syria" class="country-path" d="M600,200 L635,197 L640,215 L625,225 L600,222 L592,210 Z"/>
+          <path id="irq" data-name="Iraq" class="country-path" d="M600,222 L640,217 L650,240 L640,262 L610,268 L592,252 L590,232 Z"/>
+          <path id="irn" data-name="Iran" class="country-path" d="M642,190 L710,185 L725,205 L720,245 L695,262 L658,265 L640,245 L638,215 Z"/>
+          <path id="sau" data-name="Saudi Arabia" class="country-path" d="M588,252 L650,245 L672,258 L670,295 L640,310 L600,308 L578,288 L580,265 Z"/>
+          <path id="isr" data-name="Israel" class="country-path" d="M577,228 L590,225 L592,242 L578,245 Z"/>
+          <path id="pse" data-name="Palestine" class="country-path" d="M575,240 L580,238 L582,248 L575,248 Z"/>
+          <path id="yem" data-name="Yemen" class="country-path" d="M600,310 L645,305 L658,318 L645,332 L608,330 L594,320 Z"/>
+          <!-- Africa -->
+          <path id="egy" data-name="Egypt" class="country-path" d="M550,238 L595,235 L598,262 L580,278 L552,275 L540,258 Z"/>
+          <path id="lby" data-name="Libya" class="country-path" d="M490,235 L548,232 L552,258 L540,280 L505,285 L483,268 L482,248 Z"/>
+          <path id="tun" data-name="Tunisia" class="country-path" d="M470,218 L492,215 L495,235 L478,240 L465,232 Z"/>
+          <path id="alg" data-name="Algeria" class="country-path" d="M430,215 L472,212 L478,238 L465,258 L435,262 L415,248 L412,228 Z"/>
+          <path id="mar" data-name="Morocco" class="country-path" d="M400,210 L432,207 L435,232 L420,248 L398,245 L388,228 Z"/>
+          <path id="mli" data-name="Mali" class="country-path" d="M398,262 L448,258 L452,295 L430,320 L395,318 L378,295 Z"/>
+          <path id="nga" data-name="Nigeria" class="country-path" d="M450,295 L500,290 L508,320 L495,345 L462,348 L442,330 L440,308 Z"/>
+          <path id="eth" data-name="Ethiopia" class="country-path" d="M568,295 L618,288 L628,310 L618,340 L585,348 L562,332 L558,308 Z"/>
+          <path id="saf" data-name="South Africa" class="country-path" d="M490,400 L545,395 L558,420 L545,450 L510,458 L485,445 L475,418 Z"/>
+          <path id="ken" data-name="Kenya" class="country-path" d="M575,330 L618,325 L622,358 L600,372 L572,368 L560,348 Z"/>
+          <path id="con" data-name="DR Congo" class="country-path" d="M498,330 L545,325 L558,348 L548,378 L512,382 L490,360 L488,338 Z"/>
+          <path id="tan" data-name="Tanzania" class="country-path" d="M558,365 L600,360 L608,390 L588,408 L558,410 L540,392 Z"/>
+          <!-- South/Southeast Asia -->
+          <path id="pak" data-name="Pakistan" class="country-path" d="M700,185 L750,180 L765,200 L758,228 L728,235 L700,228 L690,208 Z"/>
+          <path id="ind" data-name="India" class="country-path" d="M720,205 L788,198 L810,225 L808,275 L782,300 L748,308 L722,295 L706,260 L708,225 Z"/>
+          <path id="afg" data-name="Afghanistan" class="country-path" d="M668,170 L710,165 L720,185 L710,205 L680,210 L660,195 Z"/>
+          <path id="bng" data-name="Bangladesh" class="country-path" d="M788,230 L808,228 L812,250 L795,258 L782,248 Z"/>
+          <path id="srk" data-name="Sri Lanka" class="country-path" d="M772,305 L785,302 L788,315 L775,318 Z"/>
+          <!-- East / SE Asia -->
+          <path id="chn" data-name="China" class="country-path" d="M760,110 L870,100 L900,130 L898,185 L870,210 L830,218 L790,215 L762,198 L748,175 L750,135 Z"/>
+          <path id="mon" data-name="Mongolia" class="country-path" d="M762,80 L860,72 L872,88 L865,105 L808,110 L762,106 Z"/>
+          <path id="jpn" data-name="Japan" class="country-path" d="M895,120 L915,115 L925,135 L918,158 L900,162 L888,145 L890,128 Z"/>
+          <path id="kor" data-name="South Korea" class="country-path" d="M878,148 L898,145 L902,160 L890,168 L875,162 Z"/>
+          <path id="prk" data-name="North Korea" class="country-path" d="M873,128 L900,122 L905,140 L890,148 L872,145 Z"/>
+          <path id="vnm" data-name="Vietnam" class="country-path" d="M840,215 L862,210 L870,240 L858,268 L840,272 L830,248 L832,222 Z"/>
+          <path id="tha" data-name="Thailand" class="country-path" d="M808,225 L840,220 L848,248 L835,268 L812,268 L800,248 Z"/>
+          <path id="mys" data-name="Malaysia" class="country-path" d="M835,280 L865,275 L872,292 L855,300 L833,296 Z"/>
+          <path id="idn" data-name="Indonesia" class="country-path" d="M855,305 L920,298 L930,315 L915,328 L858,322 L845,315 Z"/>
+          <path id="phl" data-name="Philippines" class="country-path" d="M900,220 L922,215 L930,240 L918,255 L898,250 L890,232 Z"/>
+          <!-- Central Asia -->
+          <path id="kaz" data-name="Kazakhstan" class="country-path" d="M648,100 L758,90 L768,120 L760,148 L720,155 L668,148 L640,130 L642,108 Z"/>
+          <path id="uzb" data-name="Uzbekistan" class="country-path" d="M668,148 L712,142 L720,158 L710,172 L670,175 L655,162 Z"/>
+          <!-- Oceania -->
+          <path id="aus" data-name="Australia" class="country-path" d="M838,348 L940,335 L960,375 L945,428 L895,445 L840,435 L810,400 L818,365 Z"/>
+          <path id="nzl" data-name="New Zealand" class="country-path" d="M962,420 L978,415 L982,440 L968,448 L955,438 Z"/>
+          <!-- Caucasus -->
+          <path id="geo" data-name="Georgia" class="country-path" d="M618,165 L650,162 L658,172 L648,182 L618,180 L610,172 Z"/>
+          <path id="aze" data-name="Azerbaijan" class="country-path" d="M650,168 L672,165 L678,178 L668,188 L648,185 Z"/>
+        </svg>
+      </div>
+      <div class="map-tooltip" id="map-tooltip"></div>
+      <div class="map-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(200,146,42,.45)"></div><span data-i18n="leg.selected">Selected</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(192,57,43,.35)"></div><span data-i18n="leg.conflict">Active Conflict</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(36,113,163,.3)"></div><span data-i18n="leg.nato">NATO Member</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(200,146,42,.25)"></div><span data-i18n="leg.hover">Hover</span></div>
+      </div>
+    </div>
+    <p style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted);margin-top:.75rem;text-align:center" data-i18n="map.note">
+      Use the year slider to explore historical territorial changes · Click any country to open its profile
+    </p>
+  </div>
+</div>
+
+<!-- ================================================================
+     PAGE: EXPLORE
+     ================================================================ -->
+<div class="page" id="page-explore">
+  <section style="padding:3rem 0 4rem">
+    <div class="container">
+      <div class="section-hdr mt-3">
+        <div><div class="label mb-1" data-i18n="explore.label">Intelligence Archive</div><h2 data-i18n="explore.h">All Conflicts</h2></div>
+      </div>
+      <div class="filter-bar">
+        <span class="label" data-i18n="filter.label">Filter:</span>
+        <select class="filter-sel" id="f-region" onchange="renderExplore()">
+          <option value="" data-i18n="filter.allRegions">All Regions</option>
+          <option value="europe">Europe</option>
+          <option value="asia">Asia</option>
+          <option value="middle-east">Middle East</option>
+          <option value="global">Global</option>
+          <option value="africa">Africa</option>
+        </select>
+        <select class="filter-sel" id="f-type" onchange="renderExplore()">
+          <option value="" data-i18n="filter.allTypes">All Types</option>
+          <option value="total-war">Total War</option>
+          <option value="ideological">Ideological</option>
+          <option value="proxy">Proxy War</option>
+          <option value="civil">Civil War</option>
+          <option value="revolution">Revolution</option>
+        </select>
+        <select class="filter-sel" id="f-era" onchange="renderExplore()">
+          <option value="" data-i18n="filter.allEras">All Eras</option>
+          <option value="pre-1945">Pre-1945</option>
+          <option value="cold-war">Cold War Era</option>
+          <option value="post-cold-war">Post-Cold War</option>
+          <option value="21st-century">21st Century</option>
+        </select>
+      </div>
+      <div class="grid-3" id="explore-grid"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ================================================================
+     PAGE: COUNTRIES
+     ================================================================ -->
+<div class="page" id="page-countries">
+  <section style="padding:3rem 0 4rem">
+    <div class="container">
+      <div class="section-hdr mt-3">
+        <div><div class="label mb-1" data-i18n="countries.label">Country Database</div><h2 data-i18n="countries.h">Country Profiles</h2></div>
+      </div>
+      <div class="grid-4" id="countries-grid"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ================================================================
+     PAGE: POWER INDEX
+     ================================================================ -->
+<div class="page" id="page-power">
+  <div class="power-page container">
+    <div class="section-hdr mt-3">
+      <div><div class="label mb-1" data-i18n="power.label">Geopolitical Analysis</div><h2 data-i18n="power.h">Global Power Index</h2></div>
+    </div>
+    <div class="info-box mb-4">
+      <strong>Methodology:</strong> <span data-i18n="power.info">Rankings are composite scores based on military strength (30%), economic power (30%), political influence (25%), and global alliances (15%). Data sourced from SIPRI, World Bank, and UN reports.</span>
+    </div>
+    <div class="score-breakdown mb-4" id="power-legend">
+      <div class="score-card"><div class="label mb-2" data-i18n="power.mil">Military</div><div style="font-size:1.5rem">⚔</div><p style="font-size:12px;color:var(--text-muted);margin-top:.5rem" data-i18n="power.mil.desc">Nuclear arsenal, defense budget, active personnel</p></div>
+      <div class="score-card"><div class="label mb-2" data-i18n="power.eco">Economic</div><div style="font-size:1.5rem">📊</div><p style="font-size:12px;color:var(--text-muted);margin-top:.5rem" data-i18n="power.eco.desc">GDP, trade volume, financial reserves</p></div>
+      <div class="score-card"><div class="label mb-2" data-i18n="power.inf">Influence</div><div style="font-size:1.5rem">🌐</div><p style="font-size:12px;color:var(--text-muted);margin-top:.5rem" data-i18n="power.inf.desc">UN Security Council, soft power, diplomatic reach</p></div>
+      <div class="score-card"><div class="label mb-2" data-i18n="power.all">Alliances</div><div style="font-size:1.5rem">🤝</div><p style="font-size:12px;color:var(--text-muted);margin-top:.5rem" data-i18n="power.all.desc">NATO, treaty partners, bilateral agreements</p></div>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="ranking-table" id="ranking-table">
+        <thead>
+          <tr>
+            <th>#</th><th data-i18n="rank.col.country">Country</th>
+            <th data-i18n="rank.col.military">Military</th><th data-i18n="rank.col.economic">Economic</th><th data-i18n="rank.col.influence">Influence</th><th data-i18n="rank.col.alliances">Alliances</th>
+            <th data-i18n="rank.col.total">Total Score</th>
+          </tr>
+        </thead>
+        <tbody id="ranking-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     PAGE: COMPARE
+     ================================================================ -->
+<div class="page" id="page-compare">
+  <section style="padding:3rem 0 4rem">
+    <div class="container">
+      <div class="section-hdr mt-3">
+        <div><div class="label mb-1" data-i18n="compare.label">Analytical Tool</div><h2 data-i18n="compare.h">Compare Conflicts</h2></div>
+      </div>
+      <div class="info-box mb-4"><strong>Instructions:</strong> <span data-i18n="compare.info">Select two conflicts to compare their scope, casualties, major actors, causes, and geopolitical consequences side by side.</span></div>
+      <div class="compare-wrap">
+        <div>
+          <div class="compare-sel-wrap"><select id="cmp-a" onchange="renderCompare()"><option value="">— Select Conflict A —</option></select></div>
+          <div class="card" id="cmp-panel-a" style="cursor:default;min-height:200px"></div>
+        </div>
+        <div class="compare-vs">VS</div>
+        <div>
+          <div class="compare-sel-wrap"><select id="cmp-b" onchange="renderCompare()"><option value="">— Select Conflict B —</option></select></div>
+          <div class="card" id="cmp-panel-b" style="cursor:default;min-height:200px"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================================================================
+     DETAIL VIEW (CONFLICT)
+     ================================================================ -->
+<div class="page" id="page-detail">
+  <div class="container" style="padding-top:1.5rem;padding-bottom:3rem">
+    <button class="back-btn" id="detail-back" onclick="closeDetail()" data-i18n="detail.back">← Back</button>
+    <div class="detail-hero" id="detail-header"></div>
+    <div class="detail-tabs" id="detail-tabs">
+      <button class="tab-btn active" onclick="switchTab('overview','detail')" data-i18n="tab.overview">Overview</button>
+      <button class="tab-btn" onclick="switchTab('timeline','detail')" data-i18n="tab.timeline">Timeline</button>
+      <button class="tab-btn" onclick="switchTab('actors','detail')" data-i18n="tab.actors">Actors</button>
+      <button class="tab-btn" onclick="switchTab('causes','detail')" data-i18n="tab.causes">Causes & Impact</button>
+      <button class="tab-btn" onclick="switchTab('bias','detail')" data-i18n="tab.bias">Bias Check</button>
+    </div>
+    <div id="dt-overview" class="tab-panel active"></div>
+    <div id="dt-timeline" class="tab-panel"></div>
+    <div id="dt-actors" class="tab-panel"></div>
+    <div id="dt-causes" class="tab-panel"></div>
+    <div id="dt-bias" class="tab-panel"></div>
+  </div>
+</div>
+
+<!-- ================================================================
+     DETAIL VIEW (COUNTRY)
+     ================================================================ -->
+<div class="page" id="page-country-detail">
+  <div class="container" style="padding-top:1.5rem;padding-bottom:3rem">
+    <button class="back-btn" onclick="closeCountryDetail()" data-i18n="country.back">← Back</button>
+    <div class="country-hero" id="country-header"></div>
+    <div class="detail-tabs">
+      <button class="tab-btn active" onclick="switchTab('c-overview','country')" data-i18n="tab.c-overview">Overview</button>
+      <button class="tab-btn" onclick="switchTab('c-timeline','country')" data-i18n="tab.c-timeline">History</button>
+      <button class="tab-btn" onclick="switchTab('c-politics','country')" data-i18n="tab.c-politics">Politics</button>
+      <button class="tab-btn" onclick="switchTab('c-relations','country')" data-i18n="tab.c-relations">Relations</button>
+      <button class="tab-btn" onclick="switchTab('c-analysis','country')" data-i18n="tab.c-analysis">Analysis</button>
+    </div>
+    <div id="ct-c-overview" class="tab-panel active"></div>
+    <div id="ct-c-timeline" class="tab-panel"></div>
+    <div id="ct-c-politics" class="tab-panel"></div>
+    <div id="ct-c-relations" class="tab-panel"></div>
+    <div id="ct-c-analysis" class="tab-panel"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">NEXUS</div>
+  <div class="footer-sub" data-i18n="footer.sub">Geopolitical Intelligence Platform · Academic & Diplomatic Use · Data from UN, SIPRI, World Bank</div>
+</footer>
+
+<script>
+/* ================================================================
+   i18n — TRANSLATIONS
+   ================================================================ */
+const TRANSLATIONS = {
+  en: {
+    "nav.home":"Intelligence","nav.map":"World Map","nav.explore":"Explore",
+    "nav.countries":"Countries","nav.power":"Power Index","nav.compare":"Compare",
+    "hero.badge":"Geopolitical Intelligence Platform",
+    "hero.headline":"Understanding Conflicts. Navigating History.",
+    "hero.sub":"A structured intelligence resource for diplomats, scholars, and analysts. Explore the causes, actors, and consequences of pivotal world events.",
+    "hero.stat1":"Conflicts Indexed","hero.stat2":"Historical Events",
+    "hero.stat3":"Nations Covered","hero.stat4":"Ongoing Conflicts",
+    "search.placeholder":"Search wars, countries, political events…","search.btn":"Search →",
+    "cotw.badge":"Conflict of the Week","cotw.btn":"Full Analysis →","cotw.tlabel":"Key Events",
+    "home.featuredLabel":"Featured Analysis","home.featuredH":"Major Conflicts","home.viewAll":"View All →",
+    "map.label":"Interactive","map.heading":"World Map","map.year":"Year:",
+    "map.hint":"Click a country to open its profile",
+    "explore.label":"Intelligence Archive","explore.h":"All Conflicts",
+    "filter.label":"Filter:","filter.allRegions":"All Regions","filter.allTypes":"All Types","filter.allEras":"All Eras",
+    "countries.label":"Country Database","countries.h":"Country Profiles",
+    "power.label":"Geopolitical Analysis","power.h":"Global Power Index",
+    "power.info":"Rankings are composite scores based on military strength (30%), economic power (30%), political influence (25%), and global alliances (15%). Data sourced from SIPRI, World Bank, and UN reports.",
+    "compare.label":"Analytical Tool","compare.h":"Compare Conflicts",
+    "compare.info":"Select two conflicts to compare their scope, casualties, major actors, causes, and geopolitical consequences side by side.",
+    "detail.back":"← Back","country.back":"← Back",
+    "tab.overview":"Overview","tab.timeline":"Timeline","tab.actors":"Actors","tab.causes":"Causes & Impact","tab.bias":"Bias Check",
+    "tab.c-overview":"Overview","tab.c-timeline":"History","tab.c-politics":"Politics","tab.c-relations":"Relations","tab.c-analysis":"Analysis",
+    "footer.sub":"Geopolitical Intelligence Platform · Academic & Diplomatic Use · Data from UN, SIPRI, World Bank",
+    "map.note":"Use the year slider to explore historical territorial changes · Click any country to open its profile",
+    "leg.selected":"Selected","leg.conflict":"Active Conflict","leg.nato":"NATO Member","leg.hover":"Hover",
+    "rank.col.country":"Country","rank.col.military":"Military","rank.col.economic":"Economic",
+    "rank.col.influence":"Influence","rank.col.alliances":"Alliances","rank.col.total":"Total Score",
+    "power.mil":"Military","power.eco":"Economic","power.inf":"Influence","power.all":"Alliances",
+    "power.mil.desc":"Nuclear arsenal, defense budget, active personnel",
+    "power.eco.desc":"GDP, trade volume, financial reserves",
+    "power.inf.desc":"UN Security Council, soft power, diplomatic reach",
+    "power.all.desc":"NATO, treaty partners, bilateral agreements",
+    "nav.search.placeholder":"Search conflicts, countries…"
+  },
+  de: {
+    "nav.home":"Nachrichten","nav.map":"Weltkarte","nav.explore":"Erkunden",
+    "nav.countries":"Länder","nav.power":"Machtindex","nav.compare":"Vergleichen",
+    "hero.badge":"Geopolitische Analyseplattform",
+    "hero.headline":"Konflikte verstehen. Geschichte navigieren.",
+    "hero.sub":"Eine strukturierte Informationsquelle für Diplomaten, Wissenschaftler und Analysten.",
+    "hero.stat1":"Indizierte Konflikte","hero.stat2":"Historische Ereignisse",
+    "hero.stat3":"Abgedeckte Nationen","hero.stat4":"Laufende Konflikte",
+    "search.placeholder":"Kriege, Länder, politische Ereignisse suchen…","search.btn":"Suchen →",
+    "cotw.badge":"Konflikt der Woche","cotw.btn":"Vollanalyse →","cotw.tlabel":"Schlüsselereignisse",
+    "home.featuredLabel":"Ausgewählte Analyse","home.featuredH":"Wichtige Konflikte","home.viewAll":"Alle anzeigen →",
+    "map.label":"Interaktiv","map.heading":"Weltkarte","map.year":"Jahr:",
+    "map.hint":"Klicken Sie auf ein Land, um sein Profil zu öffnen",
+    "explore.label":"Intelligenzarchiv","explore.h":"Alle Konflikte",
+    "filter.label":"Filter:","filter.allRegions":"Alle Regionen","filter.allTypes":"Alle Typen","filter.allEras":"Alle Epochen",
+    "countries.label":"Länderdatenbank","countries.h":"Länderprofile",
+    "power.label":"Geopolitische Analyse","power.h":"Globaler Machtindex",
+    "power.info":"Rankings sind zusammengesetzte Scores basierend auf Militärstärke (30%), Wirtschaftskraft (30%), politischem Einfluss (25%) und globalen Allianzen (15%).",
+    "compare.label":"Analysetool","compare.h":"Konflikte vergleichen",
+    "compare.info":"Wählen Sie zwei Konflikte aus, um deren Umfang, Opfer, Hauptakteure, Ursachen und geopolitische Konsequenzen nebeneinander zu vergleichen.",
+    "detail.back":"← Zurück","country.back":"← Zurück",
+    "tab.overview":"Übersicht","tab.timeline":"Zeitleiste","tab.actors":"Akteure","tab.causes":"Ursachen & Folgen","tab.bias":"Perspektivcheck",
+    "tab.c-overview":"Übersicht","tab.c-timeline":"Geschichte","tab.c-politics":"Politik","tab.c-relations":"Beziehungen","tab.c-analysis":"Analyse",
+    "footer.sub":"Geopolitische Analyseplattform · Akademischer & Diplomatischer Gebrauch · Daten von UN, SIPRI, Weltbank",
+    "map.note":"Verwenden Sie den Zeitschieberegler, um historische Gebietsveränderungen zu erkunden",
+    "leg.selected":"Ausgewählt","leg.conflict":"Aktiver Konflikt","leg.nato":"NATO-Mitglied","leg.hover":"Hover",
+    "rank.col.country":"Land","rank.col.military":"Militär","rank.col.economic":"Wirtschaft",
+    "rank.col.influence":"Einfluss","rank.col.alliances":"Allianzen","rank.col.total":"Gesamtpunktzahl",
+    "power.mil":"Militär","power.eco":"Wirtschaft","power.inf":"Einfluss","power.all":"Allianzen",
+    "power.mil.desc":"Nukleararsenal, Verteidigungshaushalt, aktives Personal",
+    "power.eco.desc":"BIP, Handelsvolumen, Devisenreserven",
+    "power.inf.desc":"UN-Sicherheitsrat, Soft Power, diplomatische Reichweite",
+    "power.all.desc":"NATO, Vertragspartner, bilaterale Abkommen",
+    "nav.search.placeholder":"Konflikte, Länder suchen…"
+  },
+  fr: {
+    "nav.home":"Renseignement","nav.map":"Carte Mondiale","nav.explore":"Explorer",
+    "nav.countries":"Pays","nav.power":"Index de Puissance","nav.compare":"Comparer",
+    "hero.badge":"Plateforme d'Intelligence Géopolitique",
+    "hero.headline":"Comprendre les Conflits. Naviguer l'Histoire.",
+    "hero.sub":"Une ressource structurée pour diplomates, chercheurs et analystes.",
+    "hero.stat1":"Conflits Indexés","hero.stat2":"Événements Historiques",
+    "hero.stat3":"Nations Couvertes","hero.stat4":"Conflits En Cours",
+    "search.placeholder":"Rechercher guerres, pays, événements…","search.btn":"Rechercher →",
+    "cotw.badge":"Conflit de la Semaine","cotw.btn":"Analyse Complète →","cotw.tlabel":"Événements Clés",
+    "home.featuredLabel":"Analyse en Vedette","home.featuredH":"Conflits Majeurs","home.viewAll":"Voir Tout →",
+    "map.label":"Interactif","map.heading":"Carte Mondiale","map.year":"Année:",
+    "map.hint":"Cliquez sur un pays pour ouvrir son profil",
+    "explore.label":"Archive du Renseignement","explore.h":"Tous les Conflits",
+    "filter.label":"Filtrer:","filter.allRegions":"Toutes Régions","filter.allTypes":"Tous Types","filter.allEras":"Toutes Époques",
+    "countries.label":"Base de Données Pays","countries.h":"Profils des Pays",
+    "power.label":"Analyse Géopolitique","power.h":"Index de Puissance Mondiale",
+    "power.info":"Les classements sont des scores composites basés sur la puissance militaire (30%), économique (30%), l'influence politique (25%) et les alliances mondiales (15%).",
+    "compare.label":"Outil d'Analyse","compare.h":"Comparer les Conflits",
+    "compare.info":"Sélectionnez deux conflits pour comparer leur portée, leurs victimes, leurs acteurs principaux, leurs causes et leurs conséquences géopolitiques.",
+    "detail.back":"← Retour","country.back":"← Retour",
+    "tab.overview":"Aperçu","tab.timeline":"Chronologie","tab.actors":"Acteurs","tab.causes":"Causes & Impact","tab.bias":"Analyse des Biais",
+    "tab.c-overview":"Aperçu","tab.c-timeline":"Histoire","tab.c-politics":"Politique","tab.c-relations":"Relations","tab.c-analysis":"Analyse",
+    "footer.sub":"Plateforme d'Intelligence Géopolitique · Usage Académique & Diplomatique · Données de l'ONU, SIPRI, Banque Mondiale",
+    "map.note":"Utilisez le curseur de temps pour explorer les changements territoriaux historiques",
+    "leg.selected":"Sélectionné","leg.conflict":"Conflit Actif","leg.nato":"Membre OTAN","leg.hover":"Survol",
+    "rank.col.country":"Pays","rank.col.military":"Militaire","rank.col.economic":"Économique",
+    "rank.col.influence":"Influence","rank.col.alliances":"Alliances","rank.col.total":"Score Total",
+    "power.mil":"Militaire","power.eco":"Économique","power.inf":"Influence","power.all":"Alliances",
+    "power.mil.desc":"Arsenal nucléaire, budget défense, personnel actif",
+    "power.eco.desc":"PIB, volume commercial, réserves financières",
+    "power.inf.desc":"Conseil de sécurité de l'ONU, soft power, portée diplomatique",
+    "power.all.desc":"OTAN, partenaires traités, accords bilatéraux",
+    "nav.search.placeholder":"Rechercher conflits, pays…"
+  },
+  es: {
+    "nav.home":"Inteligencia","nav.map":"Mapa Mundial","nav.explore":"Explorar",
+    "nav.countries":"Países","nav.power":"Índice de Poder","nav.compare":"Comparar",
+    "hero.badge":"Plataforma de Inteligencia Geopolítica",
+    "hero.headline":"Entender los Conflictos. Navegar la Historia.",
+    "hero.sub":"Un recurso estructurado para diplomáticos, académicos y analistas.",
+    "hero.stat1":"Conflictos Indexados","hero.stat2":"Eventos Históricos",
+    "hero.stat3":"Naciones Cubiertas","hero.stat4":"Conflictos en Curso",
+    "search.placeholder":"Buscar guerras, países, eventos políticos…","search.btn":"Buscar →",
+    "cotw.badge":"Conflicto de la Semana","cotw.btn":"Análisis Completo →","cotw.tlabel":"Eventos Clave",
+    "home.featuredLabel":"Análisis Destacado","home.featuredH":"Conflictos Mayores","home.viewAll":"Ver Todo →",
+    "map.label":"Interactivo","map.heading":"Mapa Mundial","map.year":"Año:",
+    "map.hint":"Haz clic en un país para abrir su perfil",
+    "explore.label":"Archivo de Inteligencia","explore.h":"Todos los Conflictos",
+    "filter.label":"Filtrar:","filter.allRegions":"Todas Regiones","filter.allTypes":"Todos Tipos","filter.allEras":"Todas Épocas",
+    "countries.label":"Base de Datos de Países","countries.h":"Perfiles de Países",
+    "power.label":"Análisis Geopolítico","power.h":"Índice de Poder Mundial",
+    "power.info":"Los rankings son puntuaciones compuestas basadas en fuerza militar (30%), poder económico (30%), influencia política (25%) y alianzas globales (15%).",
+    "compare.label":"Herramienta Analítica","compare.h":"Comparar Conflictos",
+    "compare.info":"Seleccione dos conflictos para comparar su alcance, bajas, actores principales, causas y consecuencias geopolíticas.",
+    "detail.back":"← Volver","country.back":"← Volver",
+    "tab.overview":"Resumen","tab.timeline":"Cronología","tab.actors":"Actores","tab.causes":"Causas e Impacto","tab.bias":"Verificación de Sesgos",
+    "tab.c-overview":"Resumen","tab.c-timeline":"Historia","tab.c-politics":"Política","tab.c-relations":"Relaciones","tab.c-analysis":"Análisis",
+    "footer.sub":"Plataforma de Inteligencia Geopolítica · Uso Académico y Diplomático · Datos de ONU, SIPRI, Banco Mundial",
+    "map.note":"Use el control deslizante de tiempo para explorar cambios territoriales históricos",
+    "leg.selected":"Seleccionado","leg.conflict":"Conflicto Activo","leg.nato":"Miembro OTAN","leg.hover":"Hover",
+    "rank.col.country":"País","rank.col.military":"Militar","rank.col.economic":"Económico",
+    "rank.col.influence":"Influencia","rank.col.alliances":"Alianzas","rank.col.total":"Puntuación Total",
+    "power.mil":"Militar","power.eco":"Económico","power.inf":"Influencia","power.all":"Alianzas",
+    "power.mil.desc":"Arsenal nuclear, presupuesto defensa, personal activo",
+    "power.eco.desc":"PIB, volumen comercial, reservas financieras",
+    "power.inf.desc":"Consejo de Seguridad ONU, poder blando, alcance diplomático",
+    "power.all.desc":"OTAN, socios de tratados, acuerdos bilaterales",
+    "nav.search.placeholder":"Buscar conflictos, países…"
+  }
+};
+
+let currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  const t = TRANSLATIONS[lang] || TRANSLATIONS['en'];
+
+  // Update all data-i18n elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(t[key] !== undefined) el.textContent = t[key];
+  });
+
+  // Update placeholders
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if(t[key] !== undefined) el.placeholder = t[key];
+  });
+
+  // Sync both language selectors
+  document.querySelectorAll('.lang-select, .mobile-menu-lang').forEach(sel => sel.value = lang);
+
+  // Update nav search placeholder
+  const navSearch = document.getElementById('nav-search-input');
+  if(navSearch && t['nav.search.placeholder']) navSearch.placeholder = t['nav.search.placeholder'];
+}
+
+/* ================================================================
+   CONFLICT DATABASE
+   ================================================================ */
+const CONFLICTS = {
+  "cold-war": {
+    id:"cold-war", title:"Cold War", period:"1947–1991", type:"Ideological / Proxy",
+    region:"global", era:"cold-war", typeTag:"ideological", icon:"☭",
+    casualties:"~500,000 (proxy wars)", scope:"Global", outcome:"USSR dissolved; US unipolarity",
+    tags:["Ideological","Proxy Wars","Nuclear"],
+    summary:"The Cold War was a geopolitical tension between the United States and the Soviet Union following World War II, characterized by political hostility, arms races, proxy wars, and competition for global influence — without direct military confrontation between the two superpowers.",
+    overview:{
+      significance:"The Cold War defined the second half of the 20th century. Its end in 1991 triggered the greatest transformation of the world order since 1945.",
+      keyFacts:["Duration: 44 years (1947–1991)","Principal antagonists: USA (NATO) vs USSR (Warsaw Pact)","50+ proxy conflicts across Asia, Africa, and Latin America","Nuclear arsenals peaked at ~70,000 warheads combined","Space Race: Apollo 11 moon landing (1969)","Ended with USSR dissolution December 26, 1991"]
+    },
+    timeline:[
+      {year:"1947",title:"Truman Doctrine & Marshall Plan",desc:"President Truman pledges US support to nations resisting communist influence. Marshall Plan provides $13 billion to rebuild Western Europe."},
+      {year:"1949",title:"NATO Founded & USSR Atomic Bomb",desc:"NATO established. USSR tests first atomic bomb, ending American nuclear monopoly and accelerating the arms race."},
+      {year:"1950–53",title:"Korean War",desc:"First major hot conflict. UN forces repel North Korean invasion backed by China and USSR. Ends in armistice with Korea permanently divided."},
+      {year:"1961",title:"Berlin Wall Constructed",desc:"East Germany erects the Berlin Wall to stop mass emigration — it becomes the defining symbol of the Iron Curtain."},
+      {year:"1962",title:"Cuban Missile Crisis",desc:"World comes closest to nuclear war. 13-day standoff between Kennedy and Khrushchev resolved through back-channel diplomacy."},
+      {year:"1965–75",title:"Vietnam War",desc:"US intervenes to prevent communist North Vietnam from unifying with South. After 58,000 American deaths, US withdraws in 1973."},
+      {year:"1979",title:"Soviet Invasion of Afghanistan",desc:"USSR invades Afghanistan, triggering a decade-long guerrilla war funded by the US through the mujahideen — the Soviet 'Vietnam'."},
+      {year:"1989",title:"Fall of the Berlin Wall",desc:"Mass protests sweep Eastern Europe. Berlin Wall falls November 9, 1989 — the symbolic end of the Cold War."},
+      {year:"1991",title:"Dissolution of the USSR",desc:"Soviet Union formally dissolves December 26, 1991. 15 new independent states emerge. Cold War ends."}
+    ],
+    actors:[
+      {flag:"🇺🇸",name:"United States",role:"Superpower",side:"west",desc:"Led Western Bloc; deployed military, economic, and intelligence assets globally to contain Soviet expansion."},
+      {flag:"🇷🇺",name:"Soviet Union",role:"Superpower",side:"east",desc:"Led Eastern Bloc; competed for global influence through arms exports, ideological support, and proxy conflicts."},
+      {flag:"🇬🇧",name:"United Kingdom",role:"NATO Member",side:"west",desc:"Senior partner in Western alliance; maintained nuclear deterrent and key intelligence cooperation."},
+      {flag:"🇨🇳",name:"China",role:"Shifting Ally",side:"neutral",desc:"Initially aligned with USSR; broke with Moscow in 1960 (Sino-Soviet Split), later aligned with US against Soviet influence."},
+      {flag:"🇨🇺",name:"Cuba",role:"Soviet Ally",side:"east",desc:"Key Soviet ally in Western Hemisphere; site of the 1962 Missile Crisis."},
+      {flag:"🇩🇪",name:"West Germany",role:"NATO Frontline",side:"west",desc:"Primary potential battleground in Europe; hosted massive US military presence."}
+    ],
+    causes:["Irreconcilable ideological conflict: liberal capitalism (USA) vs Marxist-Leninist communism (USSR)","Power vacuum created by defeat of Germany and Japan left two dominant superpowers","Soviet expansion in Eastern Europe violated Yalta agreements, alarming the West","US nuclear monopoly (1945–49) created strategic asymmetry and Soviet determination for parity","Competition for decolonizing nations in Asia, Africa, and Latin America","Historical Russian distrust of Western encirclement rooted in the 1918-20 Allied intervention"],
+    consequences:["United States emerged as the sole global superpower","15 new states emerged from USSR dissolution, redrawing the map of Eurasia","NATO expanded eastward, incorporating former Warsaw Pact states","Nuclear arsenals created permanent proliferation risks","Economic liberalization swept Eastern Europe; EU expanded","Proxy wars in Korea, Vietnam, Angola, Afghanistan caused millions of deaths"],
+    bias:{
+      global:"The Cold War institutionalized the UN Security Council's veto structure, making great power consensus essential for collective security.",
+      perspectives:[
+        {side:"American Perspective",cls:"p1",text:"The Cold War was a necessary defense of freedom against totalitarian communist expansion. American resolve ultimately preserved liberty for hundreds of millions."},
+        {side:"Soviet Perspective",cls:"p2",text:"The Cold War represented capitalist imperialism and Western encirclement of a socialist state seeking security after catastrophic WWII losses. Soviet policy was defensive."},
+        {side:"Non-Aligned View",cls:"p3",text:"Many nations in the Global South saw the Cold War as two imperial powers using developing nations as proxies, sacrificing local populations for superpower rivalry."},
+        {side:"Academic Assessment",cls:"p4",text:"Historians increasingly view the Cold War as a structural conflict emerging from the international system of 1945, rather than the result of either side's aggressive intentions alone."}
+      ]
+    }
+  },
+  "ww2": {
+    id:"ww2", title:"World War II", period:"1939–1945", type:"Total War",
+    region:"europe", era:"pre-1945", typeTag:"total-war", icon:"✦",
+    casualties:"70–85 million", scope:"Global", outcome:"Allied victory; UN formed",
+    tags:["Total War","Holocaust","Nuclear"],
+    summary:"World War II was the deadliest conflict in human history, involving more than 30 nations. Triggered by Nazi Germany's invasion of Poland, it pitted the Allied powers against the Axis. It ended with the unconditional surrender of Germany and Japan, permanently reshaping the international order.",
+    overview:{
+      significance:"WWII established the post-war international order: the UN, Universal Declaration of Human Rights, Nuremberg Principles, Bretton Woods financial system, and the nuclear age.",
+      keyFacts:["Duration: 6 years (September 1939 – September 1945)","70–85 million deaths — the deadliest conflict in history","Six million Jews systematically murdered in the Holocaust","First use of nuclear weapons in warfare (Hiroshima & Nagasaki, 1945)","30+ nations directly involved","UN created October 1945"]
+    },
+    timeline:[
+      {year:"Sept 1939",title:"Germany Invades Poland",desc:"Nazi Germany's blitzkrieg invasion triggers British and French declarations of war, formally beginning WWII in Europe."},
+      {year:"May–June 1940",title:"Fall of France",desc:"Germany overruns France, Belgium, Netherlands in six weeks. Dunkirk evacuation saves 338,000 Allied troops."},
+      {year:"1940–41",title:"Battle of Britain",desc:"RAF defeats Luftwaffe's attempt to establish air superiority, preventing a German invasion. Churchill rallies the nation."},
+      {year:"June 1941",title:"Operation Barbarossa",desc:"Germany launches the largest military invasion in history against the Soviet Union with 3.8 million troops, opening the decisive Eastern Front."},
+      {year:"Dec 1941",title:"Pearl Harbor & US Entry",desc:"Japan's surprise attack on Pearl Harbor brings the United States into the war."},
+      {year:"1942–43",title:"Battle of Stalingrad",desc:"Turning point on the Eastern Front. Soviet encirclement of Germany's 6th Army (330,000 troops) marks the beginning of Germany's strategic retreat."},
+      {year:"June 1944",title:"D-Day Normandy",desc:"Operation Overlord: 156,000 Allied troops land on Normandy beaches, opening a second front and sealing Germany's encirclement."},
+      {year:"May 1945",title:"Germany Surrenders (V-E Day)",desc:"Soviet forces capture Berlin. Hitler dies. Germany signs unconditional surrender May 8, 1945."},
+      {year:"Aug 1945",title:"Atomic Bombs & Japan's Surrender",desc:"US drops atomic bombs on Hiroshima (140,000 killed) and Nagasaki (70,000 killed). Japan surrenders September 2, 1945."}
+    ],
+    actors:[
+      {flag:"🇺🇸",name:"United States",role:"Allied Power",side:"west",desc:"Decisive in supplying Allies through Lend-Lease; after Pearl Harbor provided massive military and industrial power."},
+      {flag:"🇬🇧",name:"United Kingdom",role:"Allied Power",side:"west",desc:"Resisted alone in 1940–41; Churchill's leadership was crucial to Allied resolve."},
+      {flag:"🇷🇺",name:"Soviet Union",role:"Allied Power",side:"west",desc:"Bore the greatest military burden: 27 million Soviet dead. The Eastern Front was the primary European theater."},
+      {flag:"🇩🇪",name:"Nazi Germany",role:"Axis Power",side:"east",desc:"Initiated the war through aggressive expansionism; perpetrated the Holocaust and systematic war crimes across Europe."},
+      {flag:"🇯🇵",name:"Imperial Japan",role:"Axis Power",side:"east",desc:"Sought hegemony over Asia and the Pacific; responsible for major atrocities including the Nanjing Massacre."},
+      {flag:"🇫🇷",name:"France",role:"Allied Power",side:"west",desc:"Fell in 1940; the Free French Forces under de Gaulle continued resistance; liberated 1944."},
+      {flag:"🇮🇹",name:"Italy",role:"Axis → Allied",side:"neutral",desc:"Initially Axis; after Allied invasion (1943), switched sides and joined the Allies."},
+      {flag:"🇨🇳",name:"China",role:"Allied Power",side:"west",desc:"Fought Japan since 1937; estimated 15–20 million Chinese deaths."}
+    ],
+    causes:["Punitive Treaty of Versailles (1919) imposed crushing reparations on Germany, creating economic despair and fertile ground for extremism","Great Depression (1929) destabilized European democracies and empowered fascist movements","Appeasement policy by Britain and France allowed Hitler to violate Versailles Treaty without consequence","Nazi ideology of Aryan supremacy and Lebensraum demanded territorial expansion","Japanese imperial expansionism in Asia driven by resource scarcity and nationalist ideology","Failure of the League of Nations to enforce collective security"],
+    consequences:["United Nations founded (1945) to replace the failed League of Nations","Nuremberg Trials (1945–46) established individual accountability for crimes against humanity","Marshall Plan ($13 billion) rebuilt Western Europe within American-led liberal order","Holocaust prompted the 1948 Universal Declaration of Human Rights and Genocide Convention","Decolonization accelerated as European powers, weakened by war, couldn't maintain empires","Nuclear bombing of Japan initiated the atomic age with permanent existential risk"],
+    bias:{
+      global:"WWII established the principle that aggressive war and crimes against humanity violate international law. The resulting institutions remain the foundation of the international order.",
+      perspectives:[
+        {side:"Allied Perspective",cls:"p1",text:"The war was a necessary struggle against fascist totalitarianism and genocide. Allied victory preserved democratic civilization and established a rules-based international order."},
+        {side:"German Historical Reflection",cls:"p2",text:"Post-war Germany's Vergangenheitsbewältigung produced a culture of responsibility now constitutionally embedded. Modern Germany views WWII as a permanent obligation to human rights."},
+        {side:"Asian Perspective",cls:"p3",text:"In East Asia, historical memory of the war remains deeply contested. Japan's memory debates and unresolved atrocities continue to shape regional politics."},
+        {side:"Academic Assessment",cls:"p4",text:"Scholars emphasize the systemic failures — Versailles, the Depression, institutional collapse — alongside individual agency, to explain how Europe's bloodiest century culminated in total war."}
+      ]
+    }
+  },
+  "ukraine": {
+    id:"ukraine", title:"Russia–Ukraine War", period:"2022–Present", type:"Interstate Armed Conflict",
+    region:"europe", era:"21st-century", typeTag:"total-war", icon:"⚔",
+    casualties:"500,000+ (estimated)", scope:"Regional (global consequences)", outcome:"Ongoing",
+    tags:["Armed Conflict","Ongoing","NATO"],
+    summary:"On February 24, 2022, Russia launched a full-scale invasion of Ukraine — the largest conventional military operation in Europe since World War II. Rooted in the post-Soviet contest over Ukraine's geopolitical orientation, it has caused massive casualties, a refugee crisis, and a fundamental restructuring of European security architecture.",
+    overview:{
+      significance:"The war shattered the post-Cold War European security order, revitalized NATO, and forced a global reckoning with the use of military force to revise internationally recognized borders.",
+      keyFacts:["Russia's initial offensive on Kyiv failed within weeks","Over 6 million Ukrainian refugees displaced across Europe","Russia expelled from G8, SWIFT sanctions imposed","Finland and Sweden joined NATO (2023, 2024)","Ukraine received $75B+ in Western military/financial support","Largest European refugee crisis since WWII"]
+    },
+    timeline:[
+      {year:"2013–14",title:"Euromaidan & Crimea Annexation",desc:"Mass protests overthrow President Yanukovych. Russia annexes Crimea and backs separatists in Donbas — the conflict's first phase."},
+      {year:"2015",title:"Minsk II Agreements",desc:"Ceasefire framework negotiated under French-German mediation. Agreements fail to be implemented; low-intensity conflict continues 8 years."},
+      {year:"Feb 21, 2022",title:"Russia Recognizes Donbas 'Republics'",desc:"Putin recognizes Donetsk and Luhansk 'People's Republics' as independent — a legal pretext for military intervention."},
+      {year:"Feb 24, 2022",title:"Full-Scale Invasion Begins",desc:"Russia launches multi-axis invasion from north (Kyiv), east, and south. Initial offensive repelled by Ukrainian forces within weeks."},
+      {year:"Apr 2022",title:"Bucha Massacre",desc:"Evidence of mass civilian killings in Bucha and other towns provokes global outrage and war crimes investigations by the ICC."},
+      {year:"Sept 2022",title:"Ukrainian Counteroffensives",desc:"Ukraine recaptures much of Kharkiv Oblast and parts of Kherson Oblast, demonstrating effectiveness of Western-supplied weapons."},
+      {year:"2023",title:"Wagner Mutiny & Attrition",desc:"Wagner Group's brief mutiny reveals internal Russian tensions. War settles into prolonged attrition with massive casualties on both sides."},
+      {year:"2024–25",title:"Kursk Incursion & Diplomacy",desc:"Ukraine conducts bold incursion into Russia's Kursk Oblast. Diplomatic efforts intensify but no ceasefire materializes. War continues."}
+    ],
+    actors:[
+      {flag:"🇺🇦",name:"Ukraine",role:"Defending State",side:"west",desc:"Fighting for territorial integrity and sovereignty; received unprecedented military and financial support from Western nations."},
+      {flag:"🇷🇺",name:"Russia",role:"Invading State",side:"east",desc:"Launched the invasion citing NATO expansion and protection of Russian speakers — justifications widely rejected internationally."},
+      {flag:"🇺🇸",name:"United States",role:"Primary Supporter",side:"west",desc:"Largest single provider of military and financial assistance; over $75 billion committed since 2022."},
+      {flag:"🇩🇪",name:"Germany",role:"Key Supporter",side:"west",desc:"Declared 'Zeitenwende' (historic turning point); provided significant military and financial assistance."},
+      {flag:"🇨🇳",name:"China",role:"Ambiguous Actor",side:"neutral",desc:"Maintains 'unlimited partnership' with Russia while officially opposing the war; provides economic lifeline through trade."},
+      {flag:"🌍",name:"NATO Alliance",role:"Collective Response",side:"west",desc:"Reinvigorated by Russian aggression; expanded to 32 members with Finland and Sweden joining."}
+    ],
+    causes:["Russia's consistent opposition to NATO enlargement, framing Ukrainian membership as existential security threat","Ukraine's Euromaidan revolution (2014) and pivot toward EU and NATO alarmed the Kremlin","Putin's denial of Ukrainian national identity — 2021 essay claiming Ukrainians and Russians are 'one people'","Failure of the Minsk process to resolve the Donbas conflict sustainably","Russia's calculation that a quick military victory was achievable","Post-Cold War NATO enlargement, viewed by Russia as breach of informal commitments"],
+    consequences:["NATO's most significant reinvigoration since the Cold War, with increased defense spending","European energy crisis prompted accelerated transition away from Russian fossil fuels","Global food crisis: Ukraine is one of the world's largest grain exporters","ICC arrest warrant issued for Putin — international law norms reinforced","Russia's isolation has accelerated its economic pivot toward China","Ukraine's EU candidacy fast-tracked, reflecting European solidarity"],
+    bias:{
+      global:"The war fundamentally challenged the post-Cold War security architecture and the principle of territorial inviolability enshrined in the UN Charter.",
+      perspectives:[
+        {side:"Ukrainian / Western Perspective",cls:"p1",text:"Russia's invasion is an illegal war of aggression in flagrant violation of the UN Charter and Budapest Memorandum. Collective defense of Ukraine is a defense of the entire rules-based international order."},
+        {side:"Russian Official Perspective",cls:"p2",text:"Russia frames the war as a response to NATO's 'aggressive expansion' to Russia's borders and cites Western support for the 2014 'coup'. It insists it is conducting a 'special military operation'."},
+        {side:"Global South View",cls:"p3",text:"Many developing nations abstained from UN resolutions, citing Western double standards, the economic consequences of sanctions, and the belief the conflict reflects great power competition in which they are collateral damage."},
+        {side:"Academic Assessment",cls:"p4",text:"Scholars debate whether the war was inevitable given NATO-Russia structural tensions, or whether it reflects Putin's particular ideological project of restoring Russian imperial identity — or both."}
+      ]
+    }
+  },
+  "arab-spring": {
+    id:"arab-spring", title:"Arab Spring", period:"2010–2012", type:"Revolution / Civil War",
+    region:"middle-east", era:"21st-century", typeTag:"revolution", icon:"◈",
+    casualties:"~500,000+ (Syria alone)", scope:"Regional (MENA)", outcome:"Mixed: Tunisia succeeded; others collapsed",
+    tags:["Revolution","Democracy","Civil War"],
+    summary:"The Arab Spring was a wave of pro-democracy protests beginning in Tunisia in December 2010. It toppled governments in Tunisia, Egypt, Libya, and Yemen, while triggering devastating civil wars in Syria and Libya — producing the worst humanitarian crises of the 21st century.",
+    overview:{
+      significance:"The Arab Spring demonstrated the power of civil society amplified by social media and the fragility of authoritarian states — but also the difficulty of democratic transition. Its aftermath fueled the refugee crisis and rise of ISIS.",
+      keyFacts:["Began December 17, 2010 with Mohamed Bouazizi's self-immolation in Tunisia","Governments fell in Tunisia, Egypt, Libya, and Yemen","Syria's civil war: 500,000+ killed, 13 million displaced","Social media played unprecedented role in organizing protests","Only Tunisia achieved lasting democratization","Rise of ISIS (2013–14) was partly a consequence of instability"]
+    },
+    timeline:[
+      {year:"Dec 2010",title:"Bouazizi's Self-Immolation",desc:"Mohamed Bouazizi, a street vendor humiliated by police, sets himself on fire, triggering massive demonstrations across Tunisia and inspiring movements region-wide."},
+      {year:"Jan 2011",title:"Ben Ali Flees Tunisia",desc:"President Ben Ali, after 23 years in power, flees to Saudi Arabia — the first successful Arab Spring revolution."},
+      {year:"Feb 2011",title:"Mubarak Resigns",desc:"Eighteen days of Tahrir Square protests force President Mubarak to resign after 30 years in power. Military assumes transitional control."},
+      {year:"Feb–Oct 2011",title:"Libyan Civil War",desc:"NATO intervenes militarily to protect civilians. Rebels capture Tripoli. Gaddafi is killed October 2011, leaving a lasting power vacuum."},
+      {year:"Mar 2011",title:"Syrian Uprising",desc:"Protests in Daraa are met with lethal force. Assad's crackdown radicalizes opposition and turns protests into an internationalized civil war."},
+      {year:"2013–14",title:"Rise of ISIS",desc:"The Islamic State exploits the power vacuum in Syria and Iraq, capturing vast territory and declaring a 'caliphate' — a direct consequence of Arab Spring instability."}
+    ],
+    actors:[
+      {flag:"🇹🇳",name:"Tunisia",role:"Origin State",side:"neutral",desc:"The only Arab Spring country to achieve sustained democratic transition — considered the 'success story'."},
+      {flag:"🇪🇬",name:"Egypt",role:"Revolution State",side:"neutral",desc:"Tahrir Square protests toppled Mubarak; brief Muslim Brotherhood rule ended by 2013 military coup under Sisi."},
+      {flag:"🇸🇾",name:"Syria",role:"Civil War State",side:"east",desc:"Assad's violent crackdown transformed protests into a devastating civil war involving regional and global powers."},
+      {flag:"🇷🇺",name:"Russia",role:"Assad Backer",side:"east",desc:"Military intervention from 2015 saved Assad's government and secured Russia's Mediterranean presence."},
+      {flag:"🇸🇦",name:"Saudi Arabia",role:"Opposition Backer",side:"west",desc:"Funded Sunni opposition groups in Syria and intervened militarily in Yemen against Houthi rebels."},
+      {flag:"🌍",name:"NATO / West",role:"Intervening Powers",side:"west",desc:"Intervened in Libya, imposed sanctions, supported opposition groups — with uneven outcomes."}
+    ],
+    causes:["Decades of authoritarian governance and absence of legitimate political outlets","High youth unemployment (25–40%) combined with rising food prices and inequality","Widespread corruption and concentration of wealth among regime-connected elites","Social media (Facebook, Al Jazeera) enabled rapid, decentralized coordination","The demonstration effect: Tunisia's success inspired movements across the region","Decades of Western support for stable authoritarian regimes left populations without democratic mechanisms"],
+    consequences:["Tunisia democratized; all other cases returned to authoritarianism or descended into civil conflict","Syria's civil war: 6+ million refugees and 6 million internally displaced","European refugee crisis (2015–16) transformed European politics and fueled far-right nationalism","ISIS established a territorial 'caliphate', inspiring global terrorist attacks","Libya became a failed state and transit hub for African migration","Arab Spring discredited the 'democratic peace' theory and raised questions about democratic transition universality"],
+    bias:{
+      global:"The Arab Spring forced a global reckoning with the tension between stability and democracy in foreign policy, particularly in the Middle East where Western powers had long prioritized stable autocracy.",
+      perspectives:[
+        {side:"Pro-Democracy Perspective",cls:"p1",text:"The Arab Spring was a legitimate popular uprising against decades of tyranny. The failures of transition reflect the weakness of external support and structural obstacles — not the illegitimacy of the democratic aspiration."},
+        {side:"Authoritarian Stability Perspective",cls:"p2",text:"The Arab Spring illustrated the dangers of rapid political change in fragile states. Where autocrats were removed without viable alternatives, the result was chaos and extremism far more dangerous than the regimes they replaced."},
+        {side:"Arab Civil Society View",cls:"p3",text:"The revolts were genuine and necessary. Failures of transition reflect external interference — Gulf state counterrevolution and Western inconsistency — not the inadequacy of Arab populations for democracy."},
+        {side:"Academic Assessment",cls:"p4",text:"Scholars emphasize that democratic transitions require decades, institutional capacity, and external support — conditions largely absent in MENA states, making these outcomes structurally predictable despite tragic."}
+      ]
+    }
+  },
+  "korean": {
+    id:"korean", title:"Korean War", period:"1950–1953", type:"Cold War Proxy",
+    region:"asia", era:"cold-war", typeTag:"proxy", icon:"◉",
+    casualties:"~3–5 million", scope:"Regional (Cold War significance)", outcome:"Armistice; permanent division",
+    tags:["Proxy War","Cold War","UN"],
+    summary:"The Korean War began when North Korea, backed by the Soviet Union and China, invaded South Korea on June 25, 1950. A UN coalition led by the United States intervened to defend South Korea. After three years of fighting, an armistice was signed — but no formal peace treaty was ever concluded, leaving Korea technically at war today.",
+    overview:{
+      significance:"The Korean War established key Cold War precedents and its absence of a peace treaty means the world's most dangerous frozen conflict — North Korea's nuclear arsenal — remains unresolved.",
+      keyFacts:["Often called the 'Forgotten War'","~36,000 US military deaths; ~3–5 million total casualties","China's entry (Oct 1950) transformed the conflict","The armistice (July 27, 1953) was never replaced by a peace treaty","The DMZ is the world's most heavily fortified border","North Korea's nuclear program makes this uniquely dangerous"]
+    },
+    timeline:[
+      {year:"June 25, 1950",title:"North Korea Invades",desc:"North Korean forces cross the 38th parallel with Soviet-supplied armor. South Korean forces collapse; Seoul falls within days."},
+      {year:"July 1950",title:"UN Authorizes Force",desc:"In an unusual moment — USSR boycotting the Security Council — the UN authorizes a multinational force to defend South Korea."},
+      {year:"Sept 1950",title:"Inchon Landing",desc:"General MacArthur's amphibious assault at Inchon is a brilliant military success, reversing the war's momentum."},
+      {year:"Oct 1950",title:"China Enters",desc:"China sends 300,000 'People's Volunteer Army' troops across the Yalu River, driving UN forces back and transforming the conflict."},
+      {year:"Apr 1951",title:"MacArthur Dismissed",desc:"President Truman dismisses General MacArthur for insubordination after MacArthur advocates expanding the war into China."},
+      {year:"July 1953",title:"Armistice Signed",desc:"An armistice (not a peace treaty) signed at Panmunjom ends active hostilities. The peninsula remains divided at roughly the 38th parallel."}
+    ],
+    actors:[
+      {flag:"🇰🇷",name:"South Korea",role:"Defending State",side:"west",desc:"Defended against invasion; emerged from the war and rebuilt into one of Asia's economic miracles."},
+      {flag:"🇰🇵",name:"North Korea",role:"Invading State",side:"east",desc:"Initiated the war backed by Soviet and Chinese support; remains communist under the Kim dynasty."},
+      {flag:"🇺🇸",name:"United States",role:"UN Command Leader",side:"west",desc:"Led and funded the UN coalition; committed over 1.8 million personnel over the course of the war."},
+      {flag:"🇨🇳",name:"China",role:"North Korean Backer",side:"east",desc:"Entry of 300,000 troops in October 1950 reversed UN advances and transformed the war."},
+      {flag:"🇷🇺",name:"Soviet Union",role:"Arms Supplier",side:"east",desc:"Equipped North Korea and provided air cover through Soviet pilots flying MiG-15s in secret."}
+    ],
+    causes:["Division of Korea at the 38th parallel by US and USSR in 1945 created two hostile states","Kim Il-sung's ambition to reunify by force, backed by Soviet weapons and Stalin's tacit approval","US announcement that Korea lay outside its 'defense perimeter' (Acheson, January 1950)","Communist revolution in China (1949) emboldened the communist bloc and alarmed the West","Cold War dynamics compelled each superpower to support its client state regardless of costs"],
+    consequences:["Korea remains permanently divided — one of the last Cold War territorial legacies","North Korea's nuclear weapons program makes this the world's most dangerous frozen conflict","~28,500 US forces remain in South Korea today, shaping Asian security architecture","US defense spending tripled and never returned to pre-war levels","Lasting US-China hostility that continues to influence relations today","South Korea's security partnership enabled its economic miracle: GDP from $64 per capita in 1953 to $35,000 today"],
+    bias:{
+      global:"The absence of a peace treaty means the Korean War is technically ongoing. North Korea's nuclear arsenal creates existential risk from any miscalculation on the heavily fortified peninsula.",
+      perspectives:[
+        {side:"South Korean Perspective",cls:"p1",text:"The war preserved South Korea's sovereignty and right to self-determination, enabling its transformation into a thriving democracy and economic powerhouse. The ongoing North Korean threat justifies continued US alliance."},
+        {side:"North Korean Perspective",cls:"p2",text:"The DPRK frames the war as the 'Fatherland Liberation War' — resistance against US imperialism. The nuclear program is presented as a deterrent against regime change following the examples of Saddam Hussein and Gaddafi."},
+        {side:"Chinese Perspective",cls:"p3",text:"China views the Korean War as the 'War to Resist America and Aid Korea' — a defining moment demonstrating the new PRC could fight the world's greatest military to a standstill. Central to Chinese nationalist narrative."},
+        {side:"Academic Assessment",cls:"p4",text:"Scholars increasingly question whether the war was truly a North Korean initiative or whether Stalin's strategic calculations were decisive — the evidence suggests both Kim and Stalin were essential to the decision to invade."}
+      ]
+    }
+  }
+};
+
+/* Additional for explore grid */
+const EXTRA_CONFLICTS = [
+  {id:"vietnam",title:"Vietnam War",period:"1955–1975",type:"Cold War Proxy",region:"asia",era:"cold-war",typeTag:"proxy",icon:"◎",casualties:"~3.5 million",scope:"Regional",outcome:"Communist victory",tags:["Proxy War","Anti-Colonial"],summary:"The US-backed South Vietnam fought communist North Vietnam for 20 years. America's defeat — after 58,000 US deaths and unprecedented domestic opposition — became a defining trauma of US foreign policy."},
+  {id:"gulf-war",title:"Gulf War",period:"1990–1991",type:"Interstate War",region:"middle-east",era:"post-cold-war",typeTag:"total-war",icon:"◆",casualties:"~50,000",scope:"Regional",outcome:"Coalition victory",tags:["UN Mandate","Oil","Coalition"],summary:"Iraq's invasion of Kuwait triggered a US-led UN coalition that expelled Iraqi forces in 100 hours of combat, establishing a template for post-Cold War collective security."},
+  {id:"rwanda",title:"Rwandan Genocide",period:"1994",type:"Genocide",region:"africa",era:"post-cold-war",typeTag:"civil",icon:"▲",casualties:"~800,000 in 100 days",scope:"National",outcome:"RPF victory; international failure",tags:["Genocide","UN Failure"],summary:"In 100 days, approximately 800,000 Tutsi and moderate Hutu were systematically killed. The international community's failure to act remains one of the gravest moral failures in UN history."},
+  {id:"iraq-war",title:"Iraq War",period:"2003–2011",type:"Invasion",region:"middle-east",era:"21st-century",typeTag:"total-war",icon:"⬡",casualties:"~460,000+",scope:"Regional",outcome:"Saddam toppled; insurgency",tags:["WMD","Post-9/11","Occupation"],summary:"The US-led invasion of Iraq — justified by disputed WMD claims — toppled Saddam Hussein but produced a prolonged insurgency, sectarian civil war, and the conditions for ISIS's rise."},
+  {id:"yugoslavia",title:"Yugoslav Wars",period:"1991–2001",type:"Civil / Ethnic War",region:"europe",era:"post-cold-war",typeTag:"civil",icon:"◐",casualties:"~140,000",scope:"Regional",outcome:"Yugoslavia dissolved; NATO intervened",tags:["Ethnic Cleansing","NATO"],summary:"The violent dissolution of Yugoslavia produced Europe's worst atrocities since WWII, including the Srebrenica massacre (8,000 killed), and established NATO as Europe's security enforcer."},
+  {id:"afghanistan",title:"War in Afghanistan",period:"2001–2021",type:"Counterinsurgency",region:"asia",era:"21st-century",typeTag:"proxy",icon:"⬢",casualties:"~240,000",scope:"National",outcome:"Taliban restoration",tags:["Post-9/11","NATO","Taliban"],summary:"NATO's longest war followed September 11. Despite 20 years and $2 trillion spent, the Taliban returned to power within weeks of US withdrawal in August 2021."},
+  {id:"suez",title:"Suez Crisis",period:"1956",type:"Colonial / Diplomatic",region:"middle-east",era:"cold-war",typeTag:"ideological",icon:"⬟",casualties:"~3,000",scope:"Regional",outcome:"Anglo-French humiliation",tags:["Decolonization","Diplomacy"],summary:"Egypt's nationalization of the Suez Canal prompted a secret invasion by Britain, France, and Israel — halted by US and Soviet pressure, definitively ending European imperial power."}
+];
+
+/* ================================================================
+   COUNTRY DATABASE
+   ================================================================ */
+const COUNTRIES = {
+  "usa": {
+    id:"usa", name:"United States of America", flag:"🇺🇸", capital:"Washington D.C.",
+    population:"334 million", gdp:"$27.4 trillion (2024)", system:"Federal Presidential Republic",
+    region:"North America", founded:"1776", mapId:"usa",
+    alliances:["NATO","UN Security Council (P5)","G7","ANZUS","Five Eyes"],
+    power:{military:97,economic:95,influence:98,alliances:95},
+    summary:"The United States is the world's leading superpower — militarily, economically, and diplomatically. Established in 1776 following independence from Britain, the US rose to global dominance through the 20th century, emerging from World War II as the dominant Western power and from the Cold War as the sole global superpower.",
+    keyFacts:["World's largest economy by nominal GDP","Largest defense budget globally (~$900B, 2024)","Permanent UN Security Council member","Founder of NATO (1949)","World's largest nuclear arsenal (co-leading with Russia)"],
+    history:[
+      {year:"1776",title:"Declaration of Independence",desc:"The 13 colonies declare independence from Britain following the American Revolution, creating the world's first modern democratic republic."},
+      {year:"1861–65",title:"Civil War",desc:"The bloodiest conflict in American history. The Union defeat of the Confederacy abolished slavery and preserved the federal union."},
+      {year:"1941–45",title:"World War II",desc:"Japan's attack on Pearl Harbor brings the US into WWII. American industrial power and manpower are decisive in the Allied victory."},
+      {year:"1947–91",title:"Cold War",desc:"The US leads the Western Bloc against the Soviet Union in a global ideological, military, and political competition."},
+      {year:"2001",title:"September 11 Attacks",desc:"Al-Qaeda attacks on the World Trade Center and Pentagon trigger the 'War on Terror' — the defining foreign policy crisis of the 21st century."},
+      {year:"2008",title:"Financial Crisis",desc:"The collapse of Lehman Brothers triggers the worst global financial crisis since 1929, reshaping global economic governance."}
+    ],
+    politics:"The United States operates under a federal presidential republic with a separation of powers between the executive (President), legislative (Congress), and judicial (Supreme Court) branches. The two-party system (Democrat/Republican) has dominated since the 19th century. The US has the world's oldest written constitution in continuous use (1789).",
+    globalRole:"The US serves as the world's primary security guarantor through NATO and bilateral defense agreements. Its dollar is the world's reserve currency. The US has veto power at the UN Security Council. It leads major multilateral institutions including the IMF, World Bank, and WTO.",
+    conflicts:["World War II (1941–45)","Korean War (1950–53)","Vietnam War (1965–75)","Gulf War (1991)","Iraq War (2003–11)","War in Afghanistan (2001–21)"]
+  },
+  "russia": {
+    id:"russia", name:"Russian Federation", flag:"🇷🇺", capital:"Moscow",
+    population:"144 million", gdp:"$2.1 trillion (2024)", system:"Federal Semi-Presidential Republic (de facto authoritarian)",
+    region:"Eurasia", founded:"1991 (current state)", mapId:"rus",
+    alliances:["UN Security Council (P5)","CSTO","SCO","BRICS"],
+    power:{military:88,economic:42,influence:72,alliances:55},
+    summary:"Russia is the world's largest country by area, spanning 11 time zones from Eastern Europe to the Pacific. It is a permanent UN Security Council member with the world's largest nuclear arsenal. Under President Vladimir Putin (in power since 2000), Russia has pursued an increasingly assertive foreign policy, challenging the post-Cold War Western-led order.",
+    keyFacts:["World's largest country by area (17.1 million km²)","Second-largest nuclear arsenal (~5,977 warheads)","Permanent UN Security Council member","World's largest natural gas reserves","Major oil and gas exporter"],
+    history:[
+      {year:"1917",title:"Russian Revolution",desc:"The Bolshevik Revolution overthrows the Tsar and establishes the world's first communist state — the foundation of the Soviet Union."},
+      {year:"1939–45",title:"Great Patriotic War",desc:"The Soviet Union suffers 27 million dead in WWII — the largest casualties of any nation. Victory over Nazi Germany defines Russian national identity."},
+      {year:"1947–91",title:"Cold War",desc:"The USSR leads the Eastern Bloc in a global competition with the United States, including the space race and nuclear arms race."},
+      {year:"1991",title:"Dissolution of the USSR",desc:"The Soviet Union dissolves into 15 independent states. Russia inherits the USSR's nuclear arsenal and UN Security Council seat."},
+      {year:"2014",title:"Annexation of Crimea",desc:"Russia annexes Crimea from Ukraine following the Euromaidan revolution — the first forcible annexation of European territory since WWII."},
+      {year:"2022",title:"Invasion of Ukraine",desc:"Russia launches a full-scale invasion of Ukraine — the largest military operation in Europe since 1945."}
+    ],
+    politics:"Russia is formally a federal semi-presidential republic but functions as a personalist authoritarian state under President Vladimir Putin. The opposition has been systematically suppressed, the media largely subordinated to state control, and elections are not considered free and fair by international observers. The United Russia party dominates the legislature.",
+    globalRole:"Russia is a permanent UN Security Council member with veto power and the world's largest nuclear arsenal. It leads the CSTO military alliance and wields significant influence in the Middle East (Syria), Central Asia, and the Caucasus. Its economy is highly dependent on fossil fuel exports.",
+    conflicts:["World War II (1941–45)","Cold War (1947–91)","Chechen Wars (1994–96, 1999–2009)","Georgian War (2008)","Syria (2015–present)","Ukraine War (2022–present)"]
+  },
+  "china": {
+    id:"china", name:"People's Republic of China", flag:"🇨🇳", capital:"Beijing",
+    population:"1.41 billion", gdp:"$17.8 trillion (2024)", system:"Single-Party Communist State",
+    region:"East Asia", founded:"1949", mapId:"chn",
+    alliances:["UN Security Council (P5)","SCO","BRICS","Belt and Road Initiative"],
+    power:{military:82,economic:88,influence:80,alliances:65},
+    summary:"China is the world's most populous nation and second-largest economy, governed by the Chinese Communist Party since 1949. Under President Xi Jinping (in power since 2012), China has pursued an increasingly assertive foreign policy — seeking to challenge American global leadership and establish itself as the dominant power in the Indo-Pacific.",
+    keyFacts:["World's most populous country (1.41 billion)","Second-largest economy by nominal GDP","Third-largest nuclear arsenal (~500 warheads)","Permanent UN Security Council member","World's largest standing army (active personnel)"],
+    history:[
+      {year:"1949",title:"Founding of the PRC",desc:"Mao Zedong's Communist Party defeats the Nationalist Kuomintang in the Chinese Civil War. The People's Republic of China is proclaimed October 1, 1949."},
+      {year:"1950–53",title:"Korean War",desc:"China sends 300,000 troops to fight the US-led UN forces, fighting the world's greatest military power to a standstill."},
+      {year:"1966–76",title:"Cultural Revolution",desc:"Mao's political campaign causes massive social upheaval and estimated 500,000–2 million deaths, purging 'bourgeois' influences."},
+      {year:"1978",title:"Economic Reforms (Deng Xiaoping)",desc:"Deng Xiaoping launches 'reform and opening up' — creating a market economy within a communist political system. GDP grows 9% annually for 30 years."},
+      {year:"1989",title:"Tiananmen Square Massacre",desc:"Pro-democracy protests crushed by the People's Liberation Army. Hundreds to thousands killed. Remains heavily censored in China."},
+      {year:"2013–present",title:"Xi Jinping Era",desc:"Xi consolidates power, eliminating presidential term limits (2018). Belt and Road Initiative launched. South China Sea militarized. Taiwan tensions intensify."}
+    ],
+    politics:"China is a single-party state governed by the Chinese Communist Party. The Party controls all branches of government, the military, and increasingly the economy and society. President Xi Jinping has eliminated rivals, abolished presidential term limits, and concentrated power to a degree not seen since Mao. Political opposition and civil society are systematically suppressed.",
+    globalRole:"China is a permanent UN Security Council member. Its Belt and Road Initiative has invested $1 trillion+ in infrastructure across 150+ countries. China is the world's largest trading nation and the primary creditor for many developing nations. It contests American leadership in the Indo-Pacific and seeks reunification with Taiwan.",
+    conflicts:["Korean War (1950–53)","Sino-Indian War (1962)","Sino-Soviet Border Conflict (1969)","Vietnam War (support)","South China Sea disputes (ongoing)","Taiwan tensions (ongoing)"]
+  },
+  "germany": {
+    id:"germany", name:"Federal Republic of Germany", flag:"🇩🇪", capital:"Berlin",
+    population:"84 million", gdp:"$4.5 trillion (2024)", system:"Federal Parliamentary Republic",
+    region:"Central Europe", founded:"1949 (West Germany); reunified 1990", mapId:"deu",
+    alliances:["NATO","EU","G7","UN"],
+    power:{military:58,economic:72,influence:68,alliances:80},
+    summary:"Germany is Europe's largest economy and a central pillar of the European Union and NATO. Its 20th century history — encompassing two World Wars, the Holocaust, defeat, division, and miraculous reunification — is arguably the most dramatic national transformation in modern history. Modern Germany is defined by its constitutional commitment to human rights and multilateralism.",
+    keyFacts:["Europe's largest economy","Most populous EU member state","Founding member of NATO and EU","Host to significant US military presence","Leader of European integration"],
+    history:[
+      {year:"1871",title:"German Unification",desc:"Otto von Bismarck unifies the German states into the German Empire under Prussian leadership following victory in the Franco-Prussian War."},
+      {year:"1914–18",title:"World War I",desc:"Germany fights the Allied powers in WWI. Defeat leads to the punitive Treaty of Versailles, planting the seeds of WWII."},
+      {year:"1933",title:"Hitler's Rise to Power",desc:"Adolf Hitler and the Nazi Party seize power in Germany's Weimar Republic, rapidly establishing a totalitarian state."},
+      {year:"1939–45",title:"World War II & Holocaust",desc:"Germany initiates WWII and perpetrates the systematic murder of 6 million Jews and millions of others. Germany's defeat leads to occupation and division."},
+      {year:"1949–90",title:"Division: West and East Germany",desc:"Germany is divided into the democratic Federal Republic (West, allied with NATO) and the communist Democratic Republic (East, Warsaw Pact). Reunified October 3, 1990."},
+      {year:"1990–present",title:"Reunification & European Leadership",desc:"Germany reunifies and becomes the anchor of European integration. Largest EU economy; key driver of European political and economic policy."}
+    ],
+    politics:"Germany is a federal parliamentary republic with proportional representation. The Chancellor (currently Olaf Scholz) is the head of government. Germany's Basic Law (constitution) embeds strong protections for human rights and democratic governance, partly as a direct response to the Nazi period. Germany operates on a consensus-based political culture.",
+    globalRole:"Germany is the EU's largest economy and a key driver of EU policy. It is a founding NATO member and hosts significant US military forces. Germany's Vergangenheitsbewältigung (working through the past) has made Holocaust remembrance and human rights central to its foreign policy identity.",
+    conflicts:["World War I (1914–18)","World War II (1939–45)","Cold War (divided, 1949–89)","Kosovo (1999, first post-WWII combat deployment)","Afghanistan (2001–21)","Support for Ukraine (2022–present)"]
+  },
+  "uk": {
+    id:"uk", name:"United Kingdom", flag:"🇬🇧", capital:"London",
+    population:"67 million", gdp:"$3.1 trillion (2024)", system:"Constitutional Monarchy / Parliamentary Democracy",
+    region:"Western Europe", founded:"1707 (Great Britain)", mapId:"gbr",
+    alliances:["NATO","UN Security Council (P5)","Five Eyes","Commonwealth","G7"],
+    power:{military:72,economic:65,influence:78,alliances:82},
+    summary:"The United Kingdom — comprising England, Scotland, Wales, and Northern Ireland — was the world's dominant imperial power through the 19th and early 20th centuries. Its empire at its peak covered a quarter of the world's land surface. Today the UK remains a permanent UN Security Council member and nuclear power with significant global influence.",
+    keyFacts:["Permanent UN Security Council member","Nuclear-armed state","World's fifth-largest economy","NATO founding member","Leader of the Commonwealth (54 nations)"],
+    history:[
+      {year:"1707",title:"Acts of Union",desc:"England and Scotland unite to form the Kingdom of Great Britain, creating the political foundation of the modern UK."},
+      {year:"18th–19th C",title:"British Empire",desc:"Britain builds the world's largest empire — at its peak covering 25% of the world's land surface and 25% of its population. The pound sterling becomes the world's reserve currency."},
+      {year:"1939–45",title:"World War II",desc:"Britain resists Nazi Germany alone in 1940–41. Churchill's leadership is decisive. Britain emerges from the war diminished but on the winning side."},
+      {year:"1945–97",title:"Decolonization",desc:"The British Empire is gradually dismantled as colonies gain independence — India (1947), Ghana (1957), Kenya (1963), Hong Kong returned to China (1997)."},
+      {year:"1973–2020",title:"EU Membership & Brexit",desc:"UK joins the European Economic Community (1973). After a divisive 2016 referendum, the UK leaves the EU (Brexit) on January 31, 2020."},
+    ],
+    politics:"The UK is a constitutional monarchy and parliamentary democracy. The Prime Minister leads the government; the monarch (King Charles III) performs ceremonial functions. Westminster-style parliamentary sovereignty is the constitutional foundation. The UK lacks a codified constitution, operating on conventions, statute law, and precedent.",
+    globalRole:"The UK is a permanent UN Security Council member with veto power and a nuclear-armed state. It leads the Five Eyes intelligence alliance with the US, Canada, Australia, and New Zealand. Post-Brexit, the UK has pursued an 'Global Britain' strategy, deepening ties with the US and Indo-Pacific partners.",
+    conflicts:["World War I (1914–18)","World War II (1939–45)","Suez Crisis (1956)","Falklands War (1982)","Gulf War (1991)","Kosovo (1999)","Iraq War (2003)","Afghanistan (2001–21)","Support for Ukraine (2022–present)"]
+  },
+  "france": {
+    id:"france", name:"French Republic", flag:"🇫🇷", capital:"Paris",
+    population:"68 million", gdp:"$3.0 trillion (2024)", system:"Semi-Presidential Republic",
+    region:"Western Europe", founded:"1958 (Fifth Republic)", mapId:"fra",
+    alliances:["NATO","UN Security Council (P5)","EU","G7","Francophonie"],
+    power:{military:70,economic:64,influence:75,alliances:78},
+    summary:"France is Western Europe's nuclear power and a permanent UN Security Council member. It has one of the world's most sophisticated diplomatic traditions and plays a leading role in European Union and African affairs. France's republican values — liberté, égalité, fraternité — continue to shape its foreign policy identity.",
+    keyFacts:["Permanent UN Security Council member","Nuclear-armed state (independent deterrent)","EU founding member","World's most visited tourist destination","Leader in Francophone Africa"],
+    history:[
+      {year:"1789",title:"French Revolution",desc:"The Revolution overthrows the monarchy and creates the First Republic. The Declaration of the Rights of Man and Citizen becomes a global template for human rights."},
+      {year:"1799–1815",title:"Napoleonic Era",desc:"Napoleon Bonaparte dominates Europe, spreading revolutionary legal codes across the continent. France's defeat leads to the Congress of Vienna and modern European balance of power."},
+      {year:"1914–18",title:"World War I",desc:"France suffers 1.4 million military dead on the Western Front — a catastrophic loss that shapes French interwar foreign policy."},
+      {year:"1939–45",title:"WWII & Vichy France",desc:"France falls in June 1940. The Vichy government collaborates with Nazi Germany. The Free French under de Gaulle and the French Resistance continue the fight."},
+      {year:"1958",title:"Fifth Republic",desc:"Charles de Gaulle establishes the Fifth Republic, creating the semi-presidential system that governs France today."},
+    ],
+    politics:"France is a semi-presidential republic where power is shared between the President and Prime Minister. President Emmanuel Macron (elected 2017, re-elected 2022) holds significant executive powers, including command of the armed forces and foreign policy.",
+    globalRole:"France is a permanent UN Security Council member and nuclear power with an independent deterrent. It leads EU foreign and defense policy, maintains military bases across Africa, and champions multilateralism. France has the world's largest exclusive economic zone.",
+    conflicts:["World War I","World War II","Indochina War (1946–54)","Suez Crisis (1956)","Algerian War (1954–62)","Gulf War (1991)","Mali/Sahel operations","Support for Ukraine (2022–present)"]
+  }
+};
+
+/* ================================================================
+   POWER RANKINGS DATA
+   ================================================================ */
+const POWER_DATA = [
+  {rank:1,flag:"🇺🇸",name:"United States",military:97,economic:95,influence:98,alliances:95},
+  {rank:2,flag:"🇨🇳",name:"China",military:82,economic:88,influence:80,alliances:65},
+  {rank:3,flag:"🇷🇺",name:"Russia",military:88,economic:42,influence:72,alliances:55},
+  {rank:4,flag:"🇬🇧",name:"United Kingdom",military:72,economic:65,influence:78,alliances:82},
+  {rank:5,flag:"🇫🇷",name:"France",military:70,economic:64,influence:75,alliances:78},
+  {rank:6,flag:"🇩🇪",name:"Germany",military:58,economic:72,influence:68,alliances:80},
+  {rank:7,flag:"🇮🇳",name:"India",military:68,economic:62,influence:60,alliances:52},
+  {rank:8,flag:"🇯🇵",name:"Japan",military:52,economic:70,influence:62,alliances:72},
+  {rank:9,flag:"🇸🇦",name:"Saudi Arabia",military:55,economic:52,influence:55,alliances:50},
+  {rank:10,flag:"🇧🇷",name:"Brazil",military:48,economic:55,influence:48,alliances:45},
+  {rank:11,flag:"🇹🇷",name:"Turkey",military:60,economic:38,influence:55,alliances:52},
+  {rank:12,flag:"🇰🇷",name:"South Korea",military:58,economic:60,influence:48,alliances:65},
+  {rank:13,flag:"🇮🇱",name:"Israel",military:62,economic:45,influence:50,alliances:55},
+  {rank:14,flag:"🇮🇷",name:"Iran",military:52,economic:30,influence:48,alliances:35},
+  {rank:15,flag:"🇵🇰",name:"Pakistan",military:50,economic:28,influence:38,alliances:42},
+];
+
+function calcTotal(p) {
+  return Math.round(p.military*0.3 + p.economic*0.3 + p.influence*0.25 + p.alliances*0.15);
+}
+
+/* ================================================================
+   CONFLICT OF THE WEEK (easily updatable)
+   ================================================================ */
+const COTW_ID = "ukraine";
+
+/* ================================================================
+   SEARCH INDEX
+   ================================================================ */
+const SEARCH_INDEX = [
+  ...Object.values(CONFLICTS).map(c=>({id:c.id,name:c.title,tag:'war',meta:c.period,type:'conflict'})),
+  ...Object.values(COUNTRIES).map(c=>({id:c.id,name:c.name,tag:'country',meta:c.capital,type:'country'})),
+  {id:'cold-war',name:'Soviet Union',tag:'country',meta:'Cold War',type:'conflict'},
+  {id:'cold-war',name:'NATO',tag:'org',meta:'1949–present',type:'conflict'},
+  {id:'ukraine',name:'Ukraine',tag:'country',meta:'Russia-Ukraine War',type:'conflict'},
+  {id:'ukraine',name:'Zelensky',tag:'country',meta:'Ukrainian President',type:'conflict'},
+  {id:'ww2',name:'Holocaust',tag:'event',meta:'World War II',type:'conflict'},
+  {id:'cold-war',name:'Cuban Missile Crisis',tag:'event',meta:'1962',type:'conflict'},
+  {id:'cold-war',name:'Berlin Wall',tag:'event',meta:'1961–1989',type:'conflict'},
+  {id:'arab-spring',name:'Arab Spring',tag:'event',meta:'2010–2012',type:'conflict'},
+];
+
+/* ================================================================
+   STATE
+   ================================================================ */
+let currentPage = 'home';
+let detailBackPage = 'home';
+let currentConflict = null;
+let currentCountry = null;
+
+/* ================================================================
+   PAGE ROUTING
+   ================================================================ */
+function goPage(name) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+  const nl = document.getElementById('nl-'+name);
+  if(nl) nl.classList.add('active');
+  currentPage = name;
+  // Lazy renders
+  if(name==='explore') renderExplore();
+  if(name==='countries') renderCountries();
+  if(name==='power') renderPowerRankings();
+  if(name==='compare') populateCompare();
+  if(name==='map') initMap();
+  // Re-apply translations after dynamic content renders
+  setLang(currentLang);
+  window.scrollTo(0,0);
+}
+
+/* ================================================================
+   CONFLICT DETAIL
+   ================================================================ */
+function openConflict(id) {
+  const c = CONFLICTS[id];
+  if(!c){alert('Full analysis coming soon for this conflict.');return;}
+  detailBackPage = currentPage;
+  currentConflict = c;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-detail').classList.add('active');
+  renderDetailHeader(c);
+  renderDetailOverview(c);
+  renderDetailTimeline(c);
+  renderDetailActors(c);
+  renderDetailCauses(c);
+  renderDetailBias(c);
+  switchTab('overview','detail');
+  window.scrollTo(0,0);
+}
+
+function closeDetail() { goPage(detailBackPage||'home'); }
+
+function quickOpen(id){ detailBackPage='home'; openConflict(id); }
+
+function renderDetailHeader(c){
+  document.getElementById('detail-header').innerHTML=`
+    <div class="label mb-2">${c.type} · ${c.region.toUpperCase()} · ${c.period}</div>
+    <h1 style="font-size:clamp(1.6rem,4vw,2.6rem);margin-bottom:1rem">${c.title}</h1>
+    <p style="color:var(--text-secondary);max-width:800px;font-size:.95rem;line-height:1.75">${c.summary}</p>
+    <div class="detail-meta">
+      <div class="detail-meta-item"><span class="label">Casualties</span><span>${c.casualties}</span></div>
+      <div class="detail-meta-item"><span class="label">Scope</span><span>${c.scope}</span></div>
+      <div class="detail-meta-item"><span class="label">Outcome</span><span>${c.outcome}</span></div>
+      <div class="detail-meta-item"><span class="label">Period</span><span>${c.period}</span></div>
+    </div>`;
+}
+function renderDetailOverview(c){
+  document.getElementById('dt-overview').innerHTML=`
+    <div class="grid-2">
+      <div>
+        <div class="label mb-2">Strategic Significance</div>
+        <p style="color:var(--text-secondary);line-height:1.75;margin-bottom:1.25rem;font-size:.9rem">${c.overview.significance}</p>
+        <div class="info-box"><strong>Diplomatic Note:</strong> This conflict is foundational to understanding the current international system. Familiarity with its causes and consequences is essential for professional competency in international affairs.</div>
+      </div>
+      <div>
+        <div class="label mb-2">Key Facts</div>
+        <ul class="cause-list">${c.overview.keyFacts.map((f,i)=>`<li><span class="cause-num">0${i+1}</span>${f}</li>`).join('')}</ul>
+      </div>
+    </div>`
+}
+function renderDetailTimeline(c){
+  document.getElementById('dt-timeline').innerHTML=`
+    <div class="label mb-3">Chronological Record</div>
+    <div class="timeline">${c.timeline.map((e,i)=>`
+      <div class="tl-item" style="animation-delay:${i*0.06}s">
+        <div class="tl-dot"></div>
+        <div class="tl-year">${e.year}</div>
+        <div class="tl-title">${e.title}</div>
+        <div class="tl-desc">${e.desc}</div>
+      </div>`).join('')}</div>`
+}
+function renderDetailActors(c){
+  document.getElementById('dt-actors').innerHTML=`
+    <div class="label mb-3">Principal Actors</div>
+    <div class="actors-grid">${c.actors.map(a=>`
+      <div class="actor-card">
+        <span class="actor-flag">${a.flag}</span>
+        <div class="actor-name">${a.name}</div>
+        <div class="actor-role">${a.role}</div>
+        <span class="actor-side side-${a.side}">${a.side==='west'?'Allied/Western':a.side==='east'?'Opposing':'Neutral'}</span>
+        <p style="font-size:12px;color:var(--text-muted);margin-top:.65rem;line-height:1.55">${a.desc}</p>
+      </div>`).join('')}</div>`
+}
+function renderDetailCauses(c){
+  document.getElementById('dt-causes').innerHTML=`
+    <div class="grid-2">
+      <div>
+        <div class="label mb-3">Root Causes</div>
+        <ul class="cause-list">${c.causes.map((x,i)=>`<li><span class="cause-num">C${i+1}</span>${x}</li>`).join('')}</ul>
+      </div>
+      <div>
+        <div class="label mb-3">Geopolitical Consequences</div>
+        <ul class="cause-list">${c.consequences.map((x,i)=>`<li><span class="cause-num" style="color:#2ecc71">R${i+1}</span>${x}</li>`).join('')}</ul>
+      </div>
+    </div>`
+}
+function renderDetailBias(c){
+  document.getElementById('dt-bias').innerHTML=`
+    <div class="info-box mb-3"><strong>Global Assessment:</strong> ${c.bias.global}</div>
+    <div class="label mb-3">Perspective Analysis — Bias Check</div>
+    <div class="insight-grid">${c.bias.perspectives.map(p=>`
+      <div class="insight-card ${p.cls}">
+        <div class="label mb-1">${p.side}</div>
+        <p>${p.text}</p>
+      </div>`).join('')}</div>
+    <div class="info-box mt-3"><strong>Analytical Note:</strong> The perspectives above represent the dominant official and scholarly narratives of each party. A trained diplomat must understand all perspectives without being captured by any single one.</div>`
+}
+
+/* ================================================================
+   COUNTRY DETAIL
+   ================================================================ */
+function openCountry(id){
+  const c = COUNTRIES[id];
+  if(!c){alert('Country profile coming soon.');return;}
+  detailBackPage = currentPage;
+  currentCountry = c;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-country-detail').classList.add('active');
+
+  // Header
+  document.getElementById('country-header').innerHTML=`
+    <div class="detail-hero::after"></div>
+    <span class="country-flag-big">${c.flag}</span>
+    <div class="label mb-2">${c.region} · ${c.system}</div>
+    <h1 style="font-size:clamp(1.5rem,3vw,2.4rem);margin-bottom:.75rem">${c.name}</h1>
+    <p style="color:var(--text-secondary);max-width:780px;font-size:.9rem;line-height:1.75;margin-bottom:1.25rem">${c.summary}</p>
+    <div class="country-stats-grid">
+      <div class="country-stat"><span class="label">Capital</span><span>${c.capital}</span></div>
+      <div class="country-stat"><span class="label">Population</span><span>${c.population}</span></div>
+      <div class="country-stat"><span class="label">GDP</span><span>${c.gdp}</span></div>
+      <div class="country-stat"><span class="label">Political System</span><span>${c.system}</span></div>
+      <div class="country-stat"><span class="label">Founded</span><span>${c.founded}</span></div>
+    </div>
+    <div style="margin-top:1.25rem">
+      <div class="label mb-2">Alliances & Memberships</div>
+      <div class="alliances-wrap">${c.alliances.map(a=>`<span class="alliance-tag">${a}</span>`).join('')}</div>
+    </div>`;
+
+  // Overview tab
+  document.getElementById('ct-c-overview').innerHTML=`
+    <div class="grid-2">
+      <div>
+        <div class="label mb-2">Key Facts</div>
+        <ul class="cause-list">${c.keyFacts.map((f,i)=>`<li><span class="cause-num">0${i+1}</span>${f}</li>`).join('')}</ul>
+      </div>
+      <div>
+        <div class="label mb-2">Major Conflicts Involved</div>
+        <ul class="cause-list">${c.conflicts.map(f=>`<li><span class="cause-num">→</span>${f}</li>`).join('')}</ul>
+      </div>
+    </div>
+    <div class="info-box mt-3">
+      <strong>Power Scores:</strong>&nbsp;
+      Military: <strong style="color:var(--accent)">${c.power.military}</strong> &nbsp;|&nbsp;
+      Economic: <strong style="color:var(--accent)">${c.power.economic}</strong> &nbsp;|&nbsp;
+      Influence: <strong style="color:var(--accent)">${c.power.influence}</strong> &nbsp;|&nbsp;
+      Alliances: <strong style="color:var(--accent)">${c.power.alliances}</strong>
+    </div>`;
+
+  // Timeline tab
+  document.getElementById('ct-c-timeline').innerHTML=`
+    <div class="label mb-3">National History</div>
+    <div class="timeline">${c.history.map((e,i)=>`
+      <div class="tl-item" style="animation-delay:${i*0.07}s">
+        <div class="tl-dot"></div>
+        <div class="tl-year">${e.year}</div>
+        <div class="tl-title">${e.title}</div>
+        <div class="tl-desc">${e.desc}</div>
+      </div>`).join('')}</div>`;
+
+  // Politics tab
+  document.getElementById('ct-c-politics').innerHTML=`
+    <div class="label mb-2">Political System</div>
+    <div class="info-box mb-3"><strong>System:</strong> ${c.system}</div>
+    <p style="color:var(--text-secondary);line-height:1.75;font-size:.9rem">${c.politics}</p>`;
+
+  // Relations tab
+  document.getElementById('ct-c-relations').innerHTML=`
+    <div class="label mb-2">Global Role & Relations</div>
+    <p style="color:var(--text-secondary);line-height:1.75;font-size:.9rem;margin-bottom:1.25rem">${c.globalRole}</p>
+    <div class="label mb-2">Alliance Memberships</div>
+    <div class="alliances-wrap">${c.alliances.map(a=>`<span class="alliance-tag">${a}</span>`).join('')}</div>`;
+
+  renderCountryAnalysis(c);
+
+  switchTab('c-overview','country');
+  window.scrollTo(0,0);
+}
+
+function computeCountryHeatScore(c){
+  const avgPower = (c.power.military + c.power.economic + c.power.influence + c.power.alliances) / 4;
+  const conflictLoad = Math.min(c.conflicts.length * 4, 20);
+  return Math.max(35, Math.min(98, Math.round(avgPower * 0.78 + conflictLoad)));
+}
+
+function buildPowerBars(power){
+  const rows = [
+    ['Military', power.military],
+    ['Economic', power.economic],
+    ['Influence', power.influence],
+    ['Alliances', power.alliances]
+  ];
+  return rows.map(([label, value])=>`
+    <div class="mini-chart-row">
+      <span>${label}</span>
+      <div class="mini-chart-track"><div class="mini-chart-fill" style="width:${value}%"></div></div>
+      <span>${value}</span>
+    </div>`).join('');
+}
+
+function getCountryExplanation(c, mode){
+  const heat = computeCountryHeatScore(c);
+  if(mode==='simple'){
+    return `${c.name} matters because it combines state power, historical weight, and active relevance in major world affairs. Its current strategic heat score is ${heat}/100, reflecting both capability and how often it sits inside global crisis networks.`;
+  }
+  if(mode==='geo'){
+    return `${c.name} plays a geopolitical role through its position in ${c.region}, its alliance web (${c.alliances.join(', ')}), and its balance of military, economic, diplomatic, and coalition leverage. This view explains why other states either balance, support, or fear it.`;
+  }
+  return `${c.name}'s current behavior is easier to read through its historical pattern: ${c.history.slice(0,3).map(entry=>`${entry.year} ${entry.title}`).join(', ')}. Those turning points still shape its institutions, threat perceptions, and foreign policy reflexes today.`;
+}
+
+function setCountryExplanation(mode){
+  if(!currentCountry) return;
+  document.querySelectorAll('.mode-btn').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.mode === mode);
+  });
+  document.getElementById('country-explain-box').innerHTML = getCountryExplanation(currentCountry, mode);
+}
+
+function renderCountryAnalysis(c){
+  const heat = computeCountryHeatScore(c);
+  document.getElementById('ct-c-analysis').innerHTML = `
+    <div class="country-analysis-grid">
+      <div class="country-metric-card">
+        <div class="metric-row">
+          <div>
+            <div class="label mb-1">Strategic Heat</div>
+            <div class="metric-note">A quick-read layer inspired by the compact ChatGPT version, but integrated into the cleaner original design.</div>
+          </div>
+          <div class="metric-value">${heat}</div>
+        </div>
+        <div class="mini-chart">${buildPowerBars(c.power)}</div>
+      </div>
+      <div class="country-metric-card">
+        <div class="label mb-1">Explain This Country</div>
+        <div class="metric-note">Switch between a plain-language, geopolitical, and historical explanation without leaving the profile.</div>
+        <div class="mode-buttons">
+          <button class="mode-btn active" type="button" data-mode="simple" onclick="setCountryExplanation('simple')">Simple</button>
+          <button class="mode-btn" type="button" data-mode="geo" onclick="setCountryExplanation('geo')">Geo</button>
+          <button class="mode-btn" type="button" data-mode="history" onclick="setCountryExplanation('history')">History</button>
+        </div>
+        <div class="explain-box" id="country-explain-box"></div>
+      </div>
+    </div>`;
+  setCountryExplanation('simple');
+}
+
+function closeCountryDetail(){ goPage(detailBackPage||'home'); }
+
+/* ================================================================
+   TAB SWITCHER
+   ================================================================ */
+function switchTab(name, context){
+  if(context==='detail'){
+    const tabs=['overview','timeline','actors','causes','bias'];
+    document.querySelectorAll('#page-detail .tab-btn').forEach((b,i)=>b.classList.toggle('active',tabs[i]===name));
+    document.querySelectorAll('#page-detail .tab-panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('dt-'+name)?.classList.add('active');
+  } else if(context==='country'){
+    const tabs=['c-overview','c-timeline','c-politics','c-relations','c-analysis'];
+    document.querySelectorAll('#page-country-detail .tab-btn').forEach((b,i)=>b.classList.toggle('active',tabs[i]===name));
+    document.querySelectorAll('#page-country-detail .tab-panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('ct-'+name)?.classList.add('active');
+  }
+}
+
+/* ================================================================
+   HOME RENDER
+   ================================================================ */
+function renderFeatured(){
+  const ids=['cold-war','ww2','ukraine','arab-spring','korean'];
+  const grid = document.getElementById('featured-grid');
+  grid.innerHTML = ids.slice(0,3).map(id=>{
+    const c=CONFLICTS[id];
+    return `<div class="card clickable" onclick="quickOpen('${c.id}')">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem">
+        <div class="card-icon">${c.icon}</div>
+        <span class="card-period">${c.period}</span>
+      </div>
+      <h3 style="margin-bottom:.5rem">${c.title}</h3>
+      <p style="color:var(--text-secondary);font-size:13px;line-height:1.6">${c.summary.substring(0,140)}…</p>
+      <div class="card-tags">${c.tags.map(t=>`<span class="badge badge-${tagClass(t)}">${t}</span>`).join('')}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderCOTW(){
+  const c = CONFLICTS[COTW_ID];
+  if(!c) return;
+  document.getElementById('cotw-period').textContent=c.period;
+  document.getElementById('cotw-title').textContent=c.title;
+  document.getElementById('cotw-summary').textContent=c.summary.substring(0,280)+'…';
+  document.getElementById('cotw-meta').innerHTML=`
+    <div class="cotw-meta-item"><span class="label">Type</span><span>${c.type}</span></div>
+    <div class="cotw-meta-item"><span class="label">Casualties</span><span>${c.casualties}</span></div>
+    <div class="cotw-meta-item"><span class="label">Status</span><span>${c.outcome}</span></div>`;
+  document.getElementById('cotw-btn').onclick=()=>quickOpen(c.id);
+  document.getElementById('cotw-timeline').innerHTML=
+    c.timeline.slice(0,4).map(e=>`
+      <div class="cotw-event">
+        <div class="cotw-year">${e.year}</div>
+        <div class="cotw-desc">${e.title} — ${e.desc.substring(0,90)}…</div>
+      </div>`).join('');
+}
+
+function tagClass(t){
+  t=t.toLowerCase();
+  if(t.includes('civil')) return 'civil';
+  if(t.includes('proxy')||t.includes('cold')) return 'proxy';
+  if(t.includes('ong')) return 'ongoing';
+  if(t.includes('rev')) return 'rev';
+  return 'war';
+}
+
+/* ================================================================
+   EXPLORE PAGE
+   ================================================================ */
+function renderExplore(){
+  const all=[...Object.values(CONFLICTS),...EXTRA_CONFLICTS];
+  const reg=document.getElementById('f-region')?.value||'';
+  const typ=document.getElementById('f-type')?.value||'';
+  const era=document.getElementById('f-era')?.value||'';
+  const filtered=all.filter(c=>(!reg||c.region===reg)&&(!typ||c.typeTag===typ)&&(!era||c.era===era));
+  const grid=document.getElementById('explore-grid');
+  if(!filtered.length){grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;color:var(--text-muted);padding:3rem;font-family:var(--font-mono);font-size:11px;letter-spacing:.1em">NO RESULTS MATCH CURRENT FILTERS</div>`;return;}
+  grid.innerHTML=filtered.map(c=>`
+    <div class="card clickable" onclick="${CONFLICTS[c.id]?`openConflict('${c.id}')`:`alert('Full analysis coming soon for ${c.title}')`}">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem">
+        <div class="card-icon">${c.icon}</div>
+        <span class="card-period">${c.period}</span>
+      </div>
+      <h3 style="margin-bottom:.5rem">${c.title}</h3>
+      <p style="color:var(--text-secondary);font-size:13px;line-height:1.6">${c.summary.substring(0,130)}…</p>
+      <div class="card-tags">${c.tags.map(t=>`<span class="badge badge-${tagClass(t)}">${t}</span>`).join('')}</div>
+      <div style="margin-top:.85rem;font-family:var(--font-mono);font-size:9px;color:var(--text-muted);letter-spacing:.1em">${CONFLICTS[c.id]?'→ Full Analysis Available':'→ Summary Only'}</div>
+    </div>`).join('');
+}
+
+/* ================================================================
+   COUNTRIES PAGE
+   ================================================================ */
+function renderCountries(){
+  const grid=document.getElementById('countries-grid');
+  const all=[...Object.values(COUNTRIES),
+    {id:'india',name:'India',flag:'🇮🇳',capital:'New Delhi',system:'Federal Parliamentary Republic',region:'South Asia',gdp:'$3.9T'},
+    {id:'japan',name:'Japan',flag:'🇯🇵',capital:'Tokyo',system:'Constitutional Monarchy',region:'East Asia',gdp:'$4.2T'},
+    {id:'brazil',name:'Brazil',flag:'🇧🇷',capital:'Brasília',system:'Federal Presidential Republic',region:'South America',gdp:'$2.1T'},
+    {id:'iran',name:'Iran',flag:'🇮🇷',capital:'Tehran',system:'Islamic Republic (Theocracy)',region:'Middle East',gdp:'$0.7T'},
+    {id:'turkey',name:'Turkey',flag:'🇹🇷',capital:'Ankara',system:'Presidential Republic',region:'Eurasia',gdp:'$1.1T'},
+    {id:'israel',name:'Israel',flag:'🇮🇱',capital:'Jerusalem',system:'Parliamentary Democracy',region:'Middle East',gdp:'$0.5T'},
+  ];
+  grid.innerHTML=all.map(c=>`
+    <div class="card clickable" onclick="openCountry('${c.id}')">
+      <div style="font-size:2.2rem;margin-bottom:.75rem">${c.flag}</div>
+      <h3 style="margin-bottom:.35rem;font-size:.95rem">${c.name}</h3>
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted);margin-bottom:.5rem">${c.capital} · ${c.region}</div>
+      <div style="font-size:12px;color:var(--text-secondary)">${c.system}</div>
+      ${COUNTRIES[c.id]?`<div style="margin-top:.75rem;font-family:var(--font-mono);font-size:9px;color:var(--accent);letter-spacing:.1em">→ Full Profile</div>`:`<div style="margin-top:.75rem;font-family:var(--font-mono);font-size:9px;color:var(--text-muted);letter-spacing:.1em">→ Coming Soon</div>`}
+    </div>`).join('');
+}
+
+/* ================================================================
+   POWER RANKINGS
+   ================================================================ */
+function renderPowerRankings(){
+  const tbody=document.getElementById('ranking-body');
+  const sorted=[...POWER_DATA].map(p=>({...p,total:calcTotal(p)})).sort((a,b)=>b.total-a.total);
+  tbody.innerHTML=sorted.map((p,i)=>`
+    <tr>
+      <td><span class="rank-num">${i+1}</span></td>
+      <td><span class="rank-flag">${p.flag}</span>${p.name}</td>
+      <td><div class="rank-cat"><div class="rank-bar-wrap"><div class="rank-bar" style="width:${p.military}%"></div></div><span class="rank-score">${p.military}</span></div></td>
+      <td><div class="rank-cat"><div class="rank-bar-wrap"><div class="rank-bar" style="width:${p.economic}%"></div></div><span class="rank-score">${p.economic}</span></div></td>
+      <td><div class="rank-cat"><div class="rank-bar-wrap"><div class="rank-bar" style="width:${p.influence}%"></div></div><span class="rank-score">${p.influence}</span></div></td>
+      <td><div class="rank-cat"><div class="rank-bar-wrap"><div class="rank-bar" style="width:${p.alliances}%"></div></div><span class="rank-score">${p.alliances}</span></div></td>
+      <td><span style="font-family:var(--font-mono);font-size:1rem;font-weight:600;color:var(--accent)">${p.total}</span></td>
+    </tr>`).join('');
+}
+
+/* ================================================================
+   COMPARE
+   ================================================================ */
+function populateCompare(){
+  const opts=Object.values(CONFLICTS).map(c=>`<option value="${c.id}">${c.title} (${c.period})</option>`).join('');
+  const empty='<option value="">— Select —</option>';
+  document.getElementById('cmp-a').innerHTML=empty+opts;
+  document.getElementById('cmp-b').innerHTML=empty+opts;
+}
+
+function renderCompare(){
+  const fields=[{l:'Period',k:'period'},{l:'Type',k:'type'},{l:'Region',k:'region'},{l:'Casualties',k:'casualties'},{l:'Scope',k:'scope'},{l:'Outcome',k:'outcome'}];
+  ['a','b'].forEach(s=>{
+    const id=document.getElementById('cmp-'+s).value;
+    const panel=document.getElementById('cmp-panel-'+s);
+    if(!id){panel.innerHTML=`<div style="color:var(--text-muted);font-family:var(--font-mono);font-size:11px;text-align:center;padding:2rem">Select a conflict above</div>`;return;}
+    const c=CONFLICTS[id];
+    panel.innerHTML=`<h3 style="margin-bottom:1rem">${c.title}</h3>${fields.map(f=>`<div class="compare-row"><div class="compare-row-label">${f.l}</div><div class="compare-row-val">${c[f.k]}</div></div>`).join('')}
+    <div style="margin-top:1rem"><button class="cotw-btn" onclick="openConflict('${c.id}')">→ Full Analysis</button></div>`;
+  });
+}
+
+/* ================================================================
+   MAP
+   ================================================================ */
+// Map country data: which countries are conflict zones, NATO, etc.
+const NATO_MEMBERS = ['usa','can','gbr','fra','deu','ita','esp','pol','nor','swe','fin','tur','nld','bel','cze','hun','rou','grc','che'];
+const CONFLICT_ZONES_2025 = ['ukr','syr','irq','yem','eth','pse'];
+const HISTORICAL_LAYERS = {
+  // Year -> state changes
+  1940: { deu_occupied: ['fra','pol','nld','bel','nor','deu'], axis: ['ita','jpn'] },
+  1945: {},
+  1950: { conflict: ['kor','prk'] },
+  1960: { ussr_sphere: ['pol','cze','hun','rou','bel'] },
+  1991: {},
+  2022: { conflict: ['ukr'] }
+};
+
+let mapInitialized = false;
+
+function initMap(){
+  if(mapInitialized) return;
+  mapInitialized = true;
+  const svg = document.getElementById('world-svg');
+  const tooltip = document.getElementById('map-tooltip');
+
+  svg.querySelectorAll('.country-path').forEach(path=>{
+    const id = path.id;
+    const name = path.getAttribute('data-name');
+
+    // Apply initial styles
+    applyMapLayer('default', parseInt(document.getElementById('time-slider').value));
+
+    path.addEventListener('mouseenter', e=>{
+      tooltip.innerHTML=`<strong>${name}</strong>`;
+      tooltip.classList.add('visible');
+    });
+    path.addEventListener('mousemove', e=>{
+      const rect = document.querySelector('.map-container').getBoundingClientRect();
+      tooltip.style.left=(e.clientX-rect.left+12)+'px';
+      tooltip.style.top=(e.clientY-rect.top-10)+'px';
+    });
+    path.addEventListener('mouseleave',()=>tooltip.classList.remove('visible'));
+    path.addEventListener('click',()=>{
+      // Remove previous highlight
+      svg.querySelectorAll('.country-path').forEach(p=>p.classList.remove('highlighted'));
+      path.classList.add('highlighted');
+      // Try to open country profile
+      const cid = id;
+      if(COUNTRIES[cid]) openCountry(cid);
+      else {
+        tooltip.innerHTML=`<strong>${name}</strong><br><span style="font-size:11px;color:var(--text-muted)">Profile coming soon</span>`;
+        tooltip.classList.add('visible');
+        setTimeout(()=>tooltip.classList.remove('visible'),2500);
+      }
+    });
+  });
+}
+
+function applyMapLayer(layer, year){
+  const svg = document.getElementById('world-svg');
+  if(!svg) return;
+  svg.querySelectorAll('.country-path').forEach(path=>{
+    path.classList.remove('conflict-zone','nato','highlighted');
+    const id = path.id;
+    if(layer==='conflicts' || layer==='default'){
+      // Show conflict zones for current era
+      if(year>=2022 && CONFLICT_ZONES_2025.includes(id)) path.classList.add('conflict-zone');
+      // Historical: WWII
+      if(year>=1939 && year<=1945){
+        if(['pol','fra','nld','bel','nor','deu'].includes(id)) path.classList.add('conflict-zone');
+        if(['rus','gbr'].includes(id)) path.style.fill='rgba(36,113,163,0.3)';
+      }
+      if(year>=1950 && year<=1953 && ['kor','prk'].includes(id)) path.classList.add('conflict-zone');
+      if(year>=2022 && id==='ukr') path.classList.add('conflict-zone');
+    }
+    if(layer==='nato'){
+      if(NATO_MEMBERS.includes(id)) path.classList.add('nato');
+      // NATO members changed over time
+      if(year<1952 && ['grc','tur'].includes(id)) path.classList.remove('nato');
+      if(year<1982 && id==='esp') path.classList.remove('nato');
+      if(year<1999 && ['pol','cze','hun'].includes(id)) path.classList.remove('nato');
+      if(year<2004 && ['rou'].includes(id)) path.classList.remove('nato');
+      if(year<2023 && id==='fin') path.classList.remove('nato');
+      if(year<2024 && id==='swe') path.classList.remove('nato');
+    }
+  });
+}
+
+function updateMapYear(year){
+  document.getElementById('year-display').textContent=year;
+  const layer = document.getElementById('map-layer').value;
+  applyMapLayer(layer, parseInt(year));
+}
+
+function updateMapLayer(){
+  const layer = document.getElementById('map-layer').value;
+  const year = parseInt(document.getElementById('time-slider').value);
+  applyMapLayer(layer, year);
+}
+
+/* ================================================================
+   SEARCH
+   ================================================================ */
+function buildSuggestions(q){
+  if(!q.trim()) return [];
+  const ql = q.toLowerCase();
+  return SEARCH_INDEX.filter(s=>s.name.toLowerCase().includes(ql)).slice(0,7);
+}
+
+function renderSuggestions(results, containerId){
+  const box = document.getElementById(containerId);
+  if(!results.length){box.classList.remove('open');return;}
+  box.innerHTML=results.map(r=>`
+    <div class="sugg-item" onclick="handleSuggClick('${r.id}','${r.type}')">
+      <span class="sugg-tag tag-${r.tag}">${r.tag}</span>
+      <span class="sugg-name">${r.name}</span>
+      <span class="sugg-meta">${r.meta||''}</span>
+    </div>`).join('');
+  box.classList.add('open');
+}
+
+function handleSuggClick(id, type){
+  document.querySelectorAll('.global-suggestions').forEach(b=>b.classList.remove('open'));
+  if(type==='country') openCountry(id);
+  else openConflict(id);
+}
+
+function handleNavSearch(val){renderSuggestions(buildSuggestions(val),'nav-suggestions');}
+function handleHeroSearch(val){renderSuggestions(buildSuggestions(val),'hero-suggestions');}
+
+function navSearchKey(e){
+  if(e.key==='Enter'){document.getElementById('nav-suggestions').classList.remove('open');executeSearch(document.getElementById('nav-search-input').value);}
+  if(e.key==='Escape') document.getElementById('nav-suggestions').classList.remove('open');
+}
+function heroSearchKey(e){
+  if(e.key==='Enter') executeHeroSearch();
+  if(e.key==='Escape') document.getElementById('hero-suggestions').classList.remove('open');
+}
+
+function executeHeroSearch(){
+  document.getElementById('hero-suggestions').classList.remove('open');
+  executeSearch(document.getElementById('hero-search-input').value);
+}
+
+function executeSearch(val){
+  if(!val||!val.trim()) return;
+  const vl=val.toLowerCase();
+  // Try conflicts first
+  const cf=Object.values(CONFLICTS).find(c=>c.title.toLowerCase().includes(vl)||c.id.includes(vl.replace(/ /g,'-')));
+  if(cf){openConflict(cf.id);return;}
+  // Try countries
+  const co=Object.values(COUNTRIES).find(c=>c.name.toLowerCase().includes(vl)||c.id.includes(vl));
+  if(co){openCountry(co.id);return;}
+  // Try search index
+  const idx=SEARCH_INDEX.find(s=>s.name.toLowerCase().includes(vl));
+  if(idx){handleSuggClick(idx.id,idx.type);return;}
+  alert('No results found for "'+val+'". Try: Cold War, Ukraine, China, Arab Spring');
+}
+
+/* ================================================================
+   MOBILE MENU
+   ================================================================ */
+function openMobileMenu(){
+  document.getElementById('mobile-menu').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeMobileMenu(){
+  document.getElementById('mobile-menu').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+/* ================================================================
+   THEME
+   ================================================================ */
+function toggleTheme(){
+  document.documentElement.setAttribute('data-theme',
+    document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');
+}
+
+/* ================================================================
+   CLOSE SUGGESTIONS ON OUTSIDE CLICK
+   ================================================================ */
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.nav-search')&&!e.target.closest('.hero-search-wrap')){
+    document.querySelectorAll('.global-suggestions').forEach(b=>b.classList.remove('open'));
+  }
+});
+
+/* ================================================================
+   INIT
+   ================================================================ */
+window.addEventListener('DOMContentLoaded',()=>{
+  renderFeatured();
+  renderCOTW();
+  setLang('en');
+  // Close mobile menu on outside click
+  document.getElementById('mobile-menu').addEventListener('click', function(e){
+    if(e.target === this) closeMobileMenu();
+  });
+});
+</script>
+</body>
+</html>
